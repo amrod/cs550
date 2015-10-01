@@ -1,6 +1,7 @@
-hw1f15.pdf
+*.pdf
 *.zip
 *.7z
 *.class
-.idea/*
+*.gpj
+hw*/.idea/*
 hw1/prod/*
