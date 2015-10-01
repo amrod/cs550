@@ -52,22 +52,25 @@ array type data members, e.g. supportingActors, first the number of supportingAc
 followed by that many supportingActors—one per line. For example, an example entry for a
 DVD is as follows:
 
-**DVD\
-Matrix\
-Keanu Reeves\
-136\
-0\
-2 ///number of supporting actors\
-Laurence Fishburne\
-Carrie-Anne Moss\
-Wachowski\
-HD\
-0 ///number of special features\
-TRUE\
-TRUE\
-0 ///number of soundOptions**
+```
+DVD
+Matrix
+Keanu Reeves
+136
+0
+2 //number of supporting actors
+Laurence Fishburne
+Carrie-Anne Moss
+Wachowski
+HD
+0 //number of special features
+TRUE
+TRUE
+0 //number of soundOptions
+```
 
 Submit an example text file of your collection with your code submission.
+
 1. Additional entries: If the user wants to insert new entries, each new entry is typed by the
 user at the keyboard when requested.
 2. Output: Each media entry will be written to the data file in the same format as the input.
