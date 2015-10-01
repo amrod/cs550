@@ -1,5 +1,5 @@
 // A. Rodriguez: Taken from Koffman and Wolfgang book. Enhanced with added Iterator.
-package mediadb;
+package edu.sju;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
  * get, set, add, remove, size, toString
  * @author Koffman and Wolfgang 
  */
-public class SingleLinkedList<E> implements Iterable<E>{
+public class LinkedList<E> implements Iterable<E>{
 
     // Nested Class
     /*<listing chapter="2" number="1">*/
@@ -21,17 +21,20 @@ public class SingleLinkedList<E> implements Iterable<E>{
 
         /** The data value. */
         private E data;
-        /** The link */
+        /** The links */
         private Node<E> next = null;
+        private Node<E> previous = null;
 
         /**
          * Construct a node with the given data value and link
-         * @param data - The data value 
-         * @param next - The link
+         * @param data - The data value
+         * @param next - link to the next node
+         * @param previous - link to the previous node
          */
-        public Node(E data, Node<E> next) {
+        public Node(E data, Node<E> next, Node<E> previous) {
             this.data = data;
             this.next = next;
+            this.previous = previous;
         }
 
         /**
@@ -39,16 +42,16 @@ public class SingleLinkedList<E> implements Iterable<E>{
          * @param data - The data value 
          */
         public Node(E data) {
-            this(data, null);
+            this(data, null, null);
         }
     }
 
-    private class SLLIterator implements Iterator<E> {
+    private class LLIterator implements Iterator<E> {
         Node<E> nextNode;
         Node<E> lastReturned;
         Node<E> beforeLastReturned;
 
-        public SLLIterator(){
+        public LLIterator(){
             nextNode = head;
             lastReturned = null;
             beforeLastReturned = null;
@@ -105,6 +108,8 @@ public class SingleLinkedList<E> implements Iterable<E>{
     // Data fields
     /** A reference to the head of the list */
     private Node<E> head = null;
+    /** A reference to the tail of the list */
+    private Node<E> tail = null;
     /** The size of the list */
     private int size = 0;
 
@@ -113,7 +118,16 @@ public class SingleLinkedList<E> implements Iterable<E>{
      *	@param item The item to be inserted
      */
     private void addFirst(E item) {
-        head = new Node<E>(item, head);
+        head = new Node<E>(item, head, null);
+        size++;
+    }
+
+    /** Insert an item as the first item of the list.
+     *	@param item The item to be inserted
+     */
+    private void addLast(E item) {
+        tail = new Node<E>(item, null, tail);
+        tail.previous.next = tail;
         size++;
     }
 
@@ -123,7 +137,7 @@ public class SingleLinkedList<E> implements Iterable<E>{
      * @param item The item to insert
      */
     private void addAfter(Node<E> node, E item) {
-        node.next = new Node<E>(item, node.next);
+        node.next = new Node<E>(item, node.next, node);
         size++;
     }
 
@@ -135,8 +149,8 @@ public class SingleLinkedList<E> implements Iterable<E>{
         Node<E> temp = head;
         if (head != null) {
             head = head.next;
-        }
-        if (temp != null) {
+        //}
+        //if (temp != null) {
             size--;
             return temp.data;
         } else {
@@ -153,7 +167,7 @@ public class SingleLinkedList<E> implements Iterable<E>{
     private E removeAfter(Node<E> node) {
         Node<E> temp = node.next;
         if (temp != null) {
-            node.next = temp.next;
+            node.next = node.next.next;
             size--;
             return temp.data;
         } else {
@@ -168,16 +182,21 @@ public class SingleLinkedList<E> implements Iterable<E>{
      */
     private Node<E> getNode(int index) {
         Node<E> node = head;
+
+        if (index == size - 1)
+            return tail;
+
         for (int i = 0; i < index && node != null; i++) {
             node = node.next;
         }
+
         return node;
     }
 
     // Public Methods
 
-    public SLLIterator iterator(){
-        return new SLLIterator();
+    public LLIterator iterator(){
+        return new LLIterator();
     }
 
     /**
@@ -225,6 +244,8 @@ public class SingleLinkedList<E> implements Iterable<E>{
         }
         if (index == 0) {
             addFirst(item);
+        } else if (index == size){
+            addLast(item);
         } else {
             Node<E> node = getNode(index - 1);
             addAfter(node, item);
@@ -237,11 +258,54 @@ public class SingleLinkedList<E> implements Iterable<E>{
      * @returns true (as specified by the Collection interface)
      */
     public boolean add(E item) {
-        add(size, item);
+        addLast(item);
         return true;
     }
 
-// Insert solution to programming exercise 1, section 5, chapter 2 here
+    /**
+     * Retrieves and removes the head (first element) of this list.
+     * @return the head of this list
+     */
+    public E remove() {
+        return removeFirst();
+    }
+
+    /**
+     * Removes the element at the specified position in this list. Shifts any subsequent elements to the left
+     * (subtracts one from their indices). Returns the element that was removed from the list.
+     * @param index the index of the element to be removed
+     * @return the element previously at the specified position
+     */
+    public E remove(int index) {
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException(Integer.toString(index));
+
+        E n;
+
+        if (index == 0)
+            n = removeFirst();
+        else if (index == size - 1)
+            n = removeLast();
+        else
+            n = removeAfter(getNode(index - 1));
+
+        return n;
+    }
+
+    /**
+     * Remove the last node from the list
+     * @returns The removed node's data or null if the list is empty
+     */
+    public E removeLast() {
+        Node<E> temp = tail;
+        if (tail != null) {
+            tail = tail.previous;
+            size--;
+            return temp.data;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Query the size of the list
