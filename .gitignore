@@ -5,3 +5,5 @@
 *.gpj
 hw*/.idea/*
 hw1/prod/*
+hw1/*.txt
+*.iml

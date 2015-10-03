@@ -1,4 +1,4 @@
-// A. Rodriguez: Taken from Koffman and Wolfgang book. Enhanced with added Iterator.
+// A. Rodriguez: Based on Koffman and Wolfgang's SingleLinkedList. Modified into a double linked circular list.
 package edu.sju;
 
 import java.util.Iterator;
@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
  * @author Koffman and Wolfgang 
  */
 public class LinkedList<E> implements Iterable<E>{
+
 
     // Nested Class
     /*<listing chapter="2" number="1">*/
@@ -118,17 +119,28 @@ public class LinkedList<E> implements Iterable<E>{
      *	@param item The item to be inserted
      */
     private void addFirst(E item) {
-        head = new Node<E>(item, head, null);
+        if (head == null){
+            head = new Node<>(item);
+            head.next = head;
+            head.previous = head;
+            tail = head;
+        } else {
+            head = new Node<>(item, head, head.previous);
+        }
         size++;
     }
 
-    /** Insert an item as the first item of the list.
+    /** Insert an item as the last item of the list.
      *	@param item The item to be inserted
      */
     private void addLast(E item) {
-        tail = new Node<E>(item, null, tail);
-        tail.previous.next = tail;
-        size++;
+        if (head == null){
+            addFirst(item);
+        } else {
+            tail = new Node<>(item, tail.next, tail);
+            tail.previous.next = tail;
+            size++;
+        }
     }
 
     /**
@@ -137,7 +149,7 @@ public class LinkedList<E> implements Iterable<E>{
      * @param item The item to insert
      */
     private void addAfter(Node<E> node, E item) {
-        node.next = new Node<E>(item, node.next, node);
+        node.next = new Node<>(item, node.next, node);
         size++;
     }
 
@@ -149,8 +161,6 @@ public class LinkedList<E> implements Iterable<E>{
         Node<E> temp = head;
         if (head != null) {
             head = head.next;
-        //}
-        //if (temp != null) {
             size--;
             return temp.data;
         } else {
@@ -166,7 +176,7 @@ public class LinkedList<E> implements Iterable<E>{
      */
     private E removeAfter(Node<E> node) {
         Node<E> temp = node.next;
-        if (temp != null) {
+        if (node.next != null) {
             node.next = node.next.next;
             size--;
             return temp.data;
