@@ -32,9 +32,9 @@ public class LinkedListTest extends TestCase {
     }
 
     public void testSize() throws Exception {
-        assertEquals(empty.size(), 0);
-        assertEquals(one.size(), 1);
-        assertEquals(multiple.size(), 3);
+        assertEquals(0, empty.size());
+        assertEquals(1, one.size());
+        assertEquals(3, multiple.size());
     }
 
     public void testGetThrowsIndexOutOfBoundsException() throws Exception {
@@ -62,9 +62,9 @@ public class LinkedListTest extends TestCase {
     }
     public void testGet() throws Exception {
         assertEquals("Check get one element", one.get(0), "foo");
-        assertEquals("Check get multiple elements", multiple.get(0), "foo");
-        assertEquals("Check get multiple elements", multiple.get(1), "bar");
-        assertEquals("Check get multiple elements", multiple.get(2), "baz");
+        assertEquals("Check get multiple elements", "foo", multiple.get(0));
+        assertEquals("Check get multiple elements", "bar", multiple.get(1));
+        assertEquals("Check get multiple elements", "baz", multiple.get(2));
     }
 
     public void testSetThrowsIndexOutOfBoundsException() throws Exception {
@@ -93,55 +93,55 @@ public class LinkedListTest extends TestCase {
 
     public void testSet() throws Exception {
         String r = one.set(0, "bar");
-        assertEquals(r, "foo");
+        assertEquals("foo", r);
 
         r = one.set(0, "foo");
-        assertEquals(r, "bar");
+        assertEquals("bar", r);
 
     }
 
     public void testAddAtEnd1() throws Exception {
         LinkedList<String> list = new LinkedList<>();
         list.add("foo");
-        assertEquals(list.size(), 1);
+        assertEquals(1, list.size());
     }
 
     public void testAddAtEnd2() throws Exception {
         empty.add("foo");
-        assertEquals(empty.size(), 1);
+        assertEquals(1, empty.size());
         one.add("foo");
-        assertEquals(one.size(), 2);
+        assertEquals(2, one.size());
         multiple.add("foo");
-        assertEquals(multiple.size(), 4);
+        assertEquals(4, multiple.size());
     }
 
     public void testAddAtIndex() throws Exception {
         empty.add(0, "foo");
         assertEquals(empty.size(), 1);
         one.add(1, "bar");
-        assertEquals("Check size increases after adding item", one.size(), 2);
-        assertEquals("Check item was added at correct index", one.get(1), "bar");
+        assertEquals("Check size increases after adding item", 2, one.size());
+        assertEquals("Check item was added at correct index", "bar", one.get(1));
     }
 
     public void testRemove() throws Exception {
-        assertEquals("Check correct value is returned when removing last element", one.remove(), "foo");
-        assertEquals("Check list is empty after removing last element", one.size(), 0);
-        assertEquals("Check correct value is returned when removing last element", multiple.remove(), "baz");
+        assertEquals("Check correct value is returned when removing last element", "foo", one.remove());
+        assertEquals("Check list is empty after removing last element", 0, one.size());
+        assertEquals("Check correct value is returned when removing last element", "foo", multiple.remove());
     }
 
     public void testRemoveAtIndex() throws Exception {
-        assertEquals(one.remove(0), "foo");
-        assertEquals("Check list is empty after removing last element", one.size(), 0);
-        assertEquals(multiple.remove(1), "bar");
-        assertEquals(multiple.remove(1), "baz");
-        assertEquals(multiple.size(), 1);
-        assertEquals("Check list size is 1 after removing element", one.size(), 1);
+        assertEquals("foo", one.remove(0));
+        assertEquals("Check list is empty after removing last element", 0, one.size());
+        assertEquals("bar", multiple.remove(1));
+        assertEquals("baz", multiple.remove(1));
+        assertEquals(1, multiple.size());
+        assertEquals("Check list size is 1 after removing element", 1, multiple.size());
     }
 
     public void testRemoveLast() throws Exception {
-        assertEquals("Check removeLast on one-element list", one.removeLast(), "foo");
-        assertEquals("Check list is empty after removing last element", one.size(), 0);
-        assertEquals(multiple.removeLast(), "baz");
-        assertEquals("Check list size after removing last element", multiple.size(), 2);
+        assertEquals("Check removeLast on one-element list", "foo", one.removeLast());
+        assertEquals("Check list is empty after removing last element", 0, one.size());
+        assertEquals("baz", multiple.removeLast());
+        assertEquals("Check list size after removing last element", 2, multiple.size());
     }
 }
