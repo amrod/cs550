@@ -138,10 +138,21 @@ public class LinkedListTest extends TestCase {
         assertEquals("Check list size is 1 after removing element", 1, multiple.size());
     }
 
-    public void testRemoveLast() throws Exception {
-        assertEquals("Check removeLast on one-element list", "foo", one.removeLast());
-        assertEquals("Check list is empty after removing last element", 0, one.size());
-        assertEquals("baz", multiple.removeLast());
+    public void testRemoveLastMultipleChangesSize() throws Exception {
+        multiple.removeLast();
         assertEquals("Check list size after removing last element", 2, multiple.size());
+    }
+
+    public void testRemoveLastMultiReturnsElement() throws Exception {
+        assertEquals("baz", multiple.removeLast());
+    }
+
+    public void testRemoveLastOnReturnsElement() throws Exception {
+        assertEquals("Check removeLast on one-element list", "foo", one.removeLast());
+    }
+
+    public void testRemoveLastOneElmentEmptyList() throws Exception {
+        one.removeLast();
+        assertEquals("Check list is empty after removing last element", 0, one.size());
     }
 }
