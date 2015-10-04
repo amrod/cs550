@@ -25,4 +25,14 @@ public class MyPolynomialTest extends TestCase {
     public void testToString2() throws Exception {
         assertEquals("4x^5 - 2x^3 - 100x^2 + 40x", poly2.toString());
     }
+
+    public void testGetCoefFirst() throws Exception {
+        assertEquals(10, poly1.getCoef(100));
+        assertEquals(4, poly2.getCoef(5));
+    }
+
+    public void testGetCoefLast() throws Exception {
+        assertEquals(1, poly1.getCoef(0));
+        assertEquals(40, poly2.getCoef(1));
+    }
 }

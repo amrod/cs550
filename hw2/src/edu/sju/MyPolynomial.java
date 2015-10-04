@@ -27,6 +27,15 @@ public class MyPolynomial implements Iterable<Integer[]>{
         return polyList.get(0)[1];
     }
 
+    public int getCoef(int exp){
+        for (Integer[] term: polyList){
+            if (term[1] == exp){
+                return term[0];
+            }
+        }
+        return 0;
+    }
+
     @Override
     public String toString(){
         StringBuilder result = new StringBuilder();
