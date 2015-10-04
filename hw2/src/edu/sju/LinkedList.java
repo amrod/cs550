@@ -83,7 +83,7 @@ public class LinkedList<E> implements Iterable<E>{
          * tail.
          */
         public boolean hasNext(){
-            return nextNode != tail;
+            return lastReturned != tail;
         }
 
         /**
@@ -154,7 +154,7 @@ public class LinkedList<E> implements Iterable<E>{
 
     /**
      * Remove the first node from the list
-     * @returns The removed node's data or null if the list is empty
+     * @return The removed node's data or null if the list is empty
      */
     private E removeFirst() {
         Node<E> temp = head;
@@ -170,7 +170,7 @@ public class LinkedList<E> implements Iterable<E>{
     /**
      * Remove the node after a given node
      * @param node The node before the one to be removed
-     * @returns The data from the removed node, or null
+     * @return The data from the removed node, or null
      *          if there is no node to remove
      */
     private E removeAfter(Node<E> node) {
@@ -187,7 +187,7 @@ public class LinkedList<E> implements Iterable<E>{
     /**
      * Find the node at a specified index
      * @param index The index of the node sought
-     * @returns The node at index or null if it does not exist
+     * @return The node at index or null if it does not exist
      */
     private Node<E> getNode(int index) {
         Node<E> node = head;
@@ -211,7 +211,7 @@ public class LinkedList<E> implements Iterable<E>{
     /**
      * Get the data value at index
      * @param index The index of the element to return
-     * @returns The data at index
+     * @return The data at index
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public E get(int index) {
@@ -226,7 +226,7 @@ public class LinkedList<E> implements Iterable<E>{
      * Set the data value at index
      * @param index The index of the item to change
      * @param newValue The new value
-     * @returns The data value priviously at index
+     * @return The data value priviously at index
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public E set(int index, E newValue) {
@@ -264,7 +264,7 @@ public class LinkedList<E> implements Iterable<E>{
     /**
      * Append the specified item to the end of the list
      * @param item The item to be appended
-     * @returns true (as specified by the Collection interface)
+     * @return true (as specified by the Collection interface)
      */
     public boolean add(E item) {
         addLast(item);
@@ -303,7 +303,7 @@ public class LinkedList<E> implements Iterable<E>{
 
     /**
      * Remove the last node from the list
-     * @returns The removed node's data or null if the list is empty
+     * @return The removed node's data or null if the list is empty
      */
     public E removeLast() {
         Node<E> temp = tail;
