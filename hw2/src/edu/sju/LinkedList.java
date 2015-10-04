@@ -83,7 +83,7 @@ public class LinkedList<E> implements Iterable<E>{
          * tail.
          */
         public boolean hasNext(){
-            return nextNode != null;
+            return nextNode != tail;
         }
 
         /**
@@ -105,7 +105,6 @@ public class LinkedList<E> implements Iterable<E>{
         }
     }
 
-    /*</listing>*/
     // Data fields
     /** A reference to the head of the list */
     private Node<E> head = null;
