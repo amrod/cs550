@@ -24,10 +24,19 @@ public class MyPolynomial implements Iterable<Integer[]>{
         return polyList.iterator();
     }
 
+    /**
+     * Get the degree of the polynomial.
+     * @return the polynomial's degree
+     */
     public int degree(){
         return polyList.get(0)[1];
     }
 
+    /**
+     * Get the coefficient corresponding to the given exponent/
+     * @param exp the exponent
+     * @return the coefficient
+     */
     public int getCoef(int exp){
         for (Integer[] term: polyList){
             if (term[1] == exp){
@@ -58,6 +67,28 @@ public class MyPolynomial implements Iterable<Integer[]>{
 
         if (coef != 0)
             polyList.add(i, newTerm);
+    }
+
+    /**
+     * Compares this polynomial with the given polynomial and returns true if they are equal, false if not.
+     * @param otherPoly an instance of MyPolynomial to compare with this polynomial
+     * @return true if the polynomials are equal, false if not
+     */
+    public boolean equals(MyPolynomial otherPoly){
+        Iterator<Integer[]> thisIter = polyList.iterator();
+        Iterator<Integer[]> otherIter = otherPoly.iterator();
+        Integer[] thisTerm;
+        Integer[] otherTerm;
+
+        while (thisIter.hasNext() && otherIter.hasNext()){
+            thisTerm = thisIter.next();
+            otherTerm = otherIter.next();
+
+            if (!thisTerm[0].equals(otherTerm[0]) || !thisTerm[1].equals(otherTerm[1]))
+                return false;
+        }
+
+        return (!thisIter.hasNext() && !otherIter.hasNext());
     }
 
     @Override

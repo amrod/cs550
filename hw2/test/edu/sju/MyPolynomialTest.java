@@ -68,4 +68,17 @@ public class MyPolynomialTest extends TestCase {
         assertEquals(2, poly2.getCoef(100));
     }
 
+    public void testEqualsPolysAreEqual() throws Exception {
+        MyPolynomial poly3 = new MyPolynomial(new Integer[][] {{4, 5}, {-2, 3}, {-100, 2}, {40, 1}});
+        assertEquals(true, poly2.equals(poly3));
+    }
+
+    public void testEqualsPolysNotEqual() throws Exception {
+        assertEquals(false, poly2.equals(poly1));
+    }
+
+    public void testEqualsPolysAreSimilar() throws Exception {
+        MyPolynomial poly3 = new MyPolynomial(new Integer[][] {{4, 5}, {-2, 3}, {-100, 2}, {40, 1}, {1, 0}});
+        assertEquals(false, poly2.equals(poly3));
+    }
 }
