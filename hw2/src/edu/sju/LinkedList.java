@@ -1,7 +1,7 @@
 // A. Rodriguez: Based on Koffman and Wolfgang's SingleLinkedList. Modified into a double linked circular list.
 package edu.sju;
 
-import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  * capabilities required by the List interface using
  * a single linked list data structure.
  * Only the following methods are provided:
- * get, set, add, remove, size, toString
+ * get, set, add, remove, getSize, toString
  * @author Koffman and Wolfgang 
  */
 public class LinkedList<E> implements Iterable<E>{
@@ -47,15 +47,45 @@ public class LinkedList<E> implements Iterable<E>{
         }
     }
 
-    private class LLIterator implements Iterator<E> {
-        Node<E> nextNode;
-        Node<E> lastReturned;
-        Node<E> beforeLastReturned;
+    private class LLIterator implements ListIterator<E> {
+        Node<E> nextNode = head;
+        Node<E> lastReturned = null;
+        int index = 0;
 
-        public LLIterator(){
-            nextNode = head;
-            lastReturned = null;
-//            beforeLastReturned = null;
+        public LLIterator(){}
+
+        public LLIterator(int i){
+            if (i<0 || i > getSize())
+                throw new IndexOutOfBoundsException();
+
+            if (i == getSize()) {
+                nextNode = head; // redundant
+                index = getSize();
+            } else {
+                for (index=0; index < i; index++) {
+                    nextNode = nextNode.next;
+                }
+            }
+        }
+
+        /**
+         * Test if there are any more nodes left in the LinkedList to iterate over.
+         * @return true if there are nodes left, false if we're already at the tail.
+         */
+        public boolean hasNext(){
+            return index < getSize();
+        }
+
+        public boolean hasPrevious(){
+            return index > 0;
+        }
+
+        public int nextIndex(){
+            return index;
+        }
+
+        public int previousIndex(){
+            return index - 1;
         }
 
         /**
@@ -67,46 +97,65 @@ public class LinkedList<E> implements Iterable<E>{
             if (!hasNext())
                 throw new NoSuchElementException();
 
-//            if (lastReturned != null)
-//                beforeLastReturned = lastReturned;
-
             lastReturned = nextNode;
-            nextNode = nextNode.next;
+            nextNode = lastReturned.next;
+            index++;
 
             return lastReturned.data;
         }
 
-        /**
-         * Test if there are any more nodes left in the LinkedList to iterate
-         * over.
-         * @return true if there are nodes left, false if we're already at the
-         * tail.
-         */
-        public boolean hasNext(){
-            return lastReturned != tail;
+        public E previous() {
+            if (!hasPrevious())
+                throw new NoSuchElementException();
+
+            lastReturned = nextNode.previous;
+            nextNode = lastReturned;
+            index--;
+
+            return lastReturned.data;
         }
+
+        public void set(E item){
+            if (lastReturned == null)
+                throw new IllegalStateException();
+            lastReturned.data = item;
+        }
+
 
         /**
          * Removes the last returned node from the LinkedList.
          */
         public void remove(){
             if (lastReturned == null)
-                throw new IllegalStateException("The next() method has not " +
-                        "been called or remove() was already called.");
+                throw new IllegalStateException();
 
-            // Next called only once, so lastReturned is 1st element
-            if (lastReturned.previous == tail) {
-                head = nextNode;
-                tail.next = nextNode;
+            if (lastReturned.next == lastReturned) {
+                head = tail = null;
+            }else {
+                lastReturned.previous.next = lastReturned.next;
+                lastReturned.next.previous = lastReturned.previous;
             }
-            else
-                lastReturned.previous.next = nextNode;
 
             size--; // Decrease list size after removing an element.
             lastReturned = null;
         }
 
+        public void add(E data){
+            Node<E> newNode = new Node<>(data);
 
+            if (head == null){
+                head = newNode;
+                tail = newNode;
+                newNode.next = newNode;
+                newNode.previous = newNode;
+            } else {
+                newNode.next = nextNode;
+                newNode.previous = nextNode.previous;
+                nextNode.previous = newNode;
+            }
+            size++;
+            lastReturned = null;
+        }
     }
 
     // Data fields
@@ -129,6 +178,7 @@ public class LinkedList<E> implements Iterable<E>{
             tail = head;
         } else {
             head = new Node<>(item, head.previous, head);
+            tail.next = head;
         }
         size++;
     }
@@ -142,6 +192,7 @@ public class LinkedList<E> implements Iterable<E>{
         } else {
             tail = new Node<>(item, tail, tail.next);
             tail.previous.next = tail;
+            head.previous = tail;
             size++;
         }
     }
@@ -172,14 +223,10 @@ public class LinkedList<E> implements Iterable<E>{
      * @return The removed node's data or null if the list is empty
      */
     private E removeFirst() {
-        Node<E> temp = head;
-        if (head != null) {
-            head = head.next;
-            size--;
-            return temp.data;
-        } else {
-            return null;
-        }
+        ListIterator<E> iter = iterator(0);
+        E item = iter.next();
+        iter.remove();
+        return item;
     }
 
     /**
@@ -188,15 +235,11 @@ public class LinkedList<E> implements Iterable<E>{
      * @return The data from the removed node, or null
      *          if there is no node to remove
      */
-    private E removeAfter(Node<E> node) {
-        Node<E> temp = node.next;
-        if (node.next != null) {
-            node.next = node.next.next;
-            size--;
-            return temp.data;
-        } else {
-            return null;
-        }
+    private E removeAt(int index) {
+        ListIterator<E> iter = iterator(index);
+        E item = iter.next();
+        iter.remove();
+        return item;
     }
 
     /**
@@ -223,6 +266,10 @@ public class LinkedList<E> implements Iterable<E>{
         return new LLIterator();
     }
 
+    public LLIterator iterator(int index){
+        return new LLIterator(index);
+    }
+
     /**
      * Get the data value at index
      * @param index The index of the element to return
@@ -241,7 +288,7 @@ public class LinkedList<E> implements Iterable<E>{
      * Set the data value at index
      * @param index The index of the item to change
      * @param newValue The new value
-     * @return The data value priviously at index
+     * @return The data value previously at index
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public E set(int index, E newValue) {
@@ -301,6 +348,8 @@ public class LinkedList<E> implements Iterable<E>{
      * @return the element previously at the specified position
      */
     public E remove(int index) {
+
+
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException(Integer.toString(index));
 
@@ -311,7 +360,7 @@ public class LinkedList<E> implements Iterable<E>{
         else if (index == size - 1)
             n = removeLast();
         else
-            n = removeAfter(getNode(index - 1));
+            n = removeAt(index);
 
         return n;
     }
@@ -321,22 +370,28 @@ public class LinkedList<E> implements Iterable<E>{
      * @return The removed node's data or null if the list is empty
      */
     public E removeLast() {
-        Node<E> temp = tail;
-        if (tail != null) {
-            tail = tail.previous;
-            size--;
-            return temp.data;
-        } else {
-            return null;
-        }
+        ListIterator<E> iter = iterator(getSize());
+        E item = iter.previous();
+        iter.remove();
+        return item;
     }
 
     /**
-     * Query the size of the list
+     * Query the getSize of the list
      * @return The number of objects in the list
      */
-    int size() {
-        return size;
+    int getSize() {
+        if (head == null)
+            return 0;
+
+        int count;
+        Node<E> node = head.next;
+
+        for (count=1; node != head; count++)
+            node = node.next;
+
+        assert size == count;
+        return count;
     }
 
     /**

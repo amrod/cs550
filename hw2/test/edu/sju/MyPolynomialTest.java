@@ -70,15 +70,22 @@ public class MyPolynomialTest extends TestCase {
 
     public void testEqualsPolysAreEqual() throws Exception {
         MyPolynomial poly3 = new MyPolynomial(new Integer[][] {{4, 5}, {-2, 3}, {-100, 2}, {40, 1}});
-        assertEquals(true, poly2.equals(poly3));
+        assertTrue(poly2.equals(poly3));
     }
 
     public void testEqualsPolysNotEqual() throws Exception {
-        assertEquals(false, poly2.equals(poly1));
+        assertFalse(poly2.equals(poly1));
     }
 
     public void testEqualsPolysAreSimilar() throws Exception {
         MyPolynomial poly3 = new MyPolynomial(new Integer[][] {{4, 5}, {-2, 3}, {-100, 2}, {40, 1}, {1, 0}});
-        assertEquals(false, poly2.equals(poly3));
+        assertFalse(poly2.equals(poly3));
+    }
+
+    public void testAddSameLength() throws Exception {
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{20, 100}, {2, 14}, {2, 0}});
+        MyPolynomial poly3 = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial result = poly2.add(poly3);
+        assertTrue(result.equals(expected));
     }
 }

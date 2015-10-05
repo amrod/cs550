@@ -91,6 +91,11 @@ public class MyPolynomial implements Iterable<Integer[]>{
         return (!thisIter.hasNext() && !otherIter.hasNext());
     }
 
+    public MyPolynomial add(MyPolynomial other){
+        MyPolynomial result = new MyPolynomial(new Integer[][] {{4, 5}});
+        return result;
+    }
+
     @Override
     public String toString(){
         StringBuilder result = new StringBuilder();
