@@ -32,7 +32,7 @@ public class LinkedList<E> implements Iterable<E>{
          * @param next - link to the next node
          * @param previous - link to the previous node
          */
-        public Node(E data, Node<E> next, Node<E> previous) {
+        public Node(E data, Node<E> previous, Node<E> next) {
             this.data = data;
             this.next = next;
             this.previous = previous;
@@ -55,7 +55,7 @@ public class LinkedList<E> implements Iterable<E>{
         public LLIterator(){
             nextNode = head;
             lastReturned = null;
-            beforeLastReturned = null;
+//            beforeLastReturned = null;
         }
 
         /**
@@ -67,8 +67,8 @@ public class LinkedList<E> implements Iterable<E>{
             if (!hasNext())
                 throw new NoSuchElementException();
 
-            if (lastReturned != null)
-                beforeLastReturned = lastReturned;
+//            if (lastReturned != null)
+//                beforeLastReturned = lastReturned;
 
             lastReturned = nextNode;
             nextNode = nextNode.next;
@@ -95,14 +95,18 @@ public class LinkedList<E> implements Iterable<E>{
                         "been called or remove() was already called.");
 
             // Next called only once, so lastReturned is 1st element
-            if (beforeLastReturned == null)
+            if (lastReturned.previous == tail) {
                 head = nextNode;
+                tail.next = nextNode;
+            }
             else
-                beforeLastReturned.next = nextNode;
+                lastReturned.previous.next = nextNode;
 
             size--; // Decrease list size after removing an element.
             lastReturned = null;
         }
+
+
     }
 
     // Data fields
@@ -124,7 +128,7 @@ public class LinkedList<E> implements Iterable<E>{
             head.previous = head;
             tail = head;
         } else {
-            head = new Node<>(item, head, head.previous);
+            head = new Node<>(item, head.previous, head);
         }
         size++;
     }
@@ -136,7 +140,7 @@ public class LinkedList<E> implements Iterable<E>{
         if (head == null){
             addFirst(item);
         } else {
-            tail = new Node<>(item, tail.next, tail);
+            tail = new Node<>(item, tail, tail.next);
             tail.previous.next = tail;
             size++;
         }
@@ -148,8 +152,19 @@ public class LinkedList<E> implements Iterable<E>{
      * @param item The item to insert
      */
     private void addAfter(Node<E> node, E item) {
-        node.next = new Node<>(item, node.next, node);
+        node.next = new Node<>(item, node, node.next);
         size++;
+    }
+
+    /**
+     * Add a node before a given node
+     * @param node The node which the new item is inserted before
+     * @param item The item to insert
+     */
+    private Node<E> addBefore(Node<E> node, E item) {
+        node.previous = new Node<>(item, node.previous, node);
+        size++;
+        return node.previous;
     }
 
     /**

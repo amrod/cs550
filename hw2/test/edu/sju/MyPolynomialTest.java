@@ -35,4 +35,37 @@ public class MyPolynomialTest extends TestCase {
         assertEquals(1, poly1.getCoef(0));
         assertEquals(40, poly2.getCoef(1));
     }
+
+    public void testGetCoefMiddle() throws Exception {
+        assertEquals(1, poly1.getCoef(14));
+        assertEquals(-2, poly2.getCoef(3));
+    }
+
+    public void testSetCoefZeroExp() throws Exception {
+        poly1.setCoef(2, 0);
+        assertEquals(2, poly1.getCoef(0));
+    }
+
+    public void testSetCoefMiddle() throws Exception {
+        poly1.setCoef(2, 14);
+        assertEquals(2, poly1.getCoef(14));
+        poly2.setCoef(2, 3);
+        assertEquals(2, poly2.getCoef(3));
+    }
+
+    public void testSetCoefNewMiddle() throws Exception {
+        poly1.setCoef(2, 3);
+        assertEquals(2, poly1.getCoef(3));
+    }
+
+    public void testSetCoefZero() throws Exception {
+        poly2.setCoef(2, 0);
+        assertEquals(2, poly2.getCoef(0));
+    }
+
+    public void testSetCoefLarger() throws Exception {
+        poly2.setCoef(2, 100);
+        assertEquals(2, poly2.getCoef(100));
+    }
+
 }

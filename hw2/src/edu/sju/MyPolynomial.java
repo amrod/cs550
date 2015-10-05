@@ -1,5 +1,6 @@
 package edu.sju;
 
+import javax.management.timer.TimerNotification;
 import java.util.Iterator;
 import static java.lang.Math.abs;
 
@@ -36,6 +37,29 @@ public class MyPolynomial implements Iterable<Integer[]>{
         return 0;
     }
 
+    /**
+     *  Sets the coefficient of the given exponent. If the term with the given exponent does not exist
+     *  and coef!=0, it is added to the polynomial.
+     * @param coef Coeficient value to set
+     * @param exp Exponent for which the coefficient will be set
+     */
+    public void setCoef(int coef, int exp){
+        Integer[] newTerm = {coef, exp};
+        int i = 0;
+
+        for(Integer[] term: polyList){
+            if (term[1] == exp){
+                term[0] = coef;
+                return;
+            } else if (term[1] < exp)
+                break;
+            i++;
+        }
+
+        if (coef != 0)
+            polyList.add(i, newTerm);
+    }
+
     @Override
     public String toString(){
         StringBuilder result = new StringBuilder();
@@ -55,33 +79,33 @@ public class MyPolynomial implements Iterable<Integer[]>{
         return result.toString();
     }
 
-    private String coeffTermToString(Integer coeff){
+    private String coeffTermToString(Integer coef){
 
-        if (coeff == 1)
+        if (coef == 1)
             return "";
         else
-            return Integer.toString(coeff);
+            return Integer.toString(coef);
     }
 
-    private String varTermToString(Integer power){
+    private String varTermToString(Integer exp){
 
         StringBuilder result = new StringBuilder();
 
-        if (power == 1)
+        if (exp == 1)
             result.append("x");
-        else if (power > 1)
-            result.append("x^").append(power);
+        else if (exp > 1)
+            result.append("x^").append(exp);
         // else result is empty string
 
         return result.toString();
     }
 
-    private String termToString(Integer coeff, Integer power){
+    private String termToString(Integer coef, Integer exp){
         String strCoeff, strPwr;
         StringBuilder result = new StringBuilder();
 
-        strCoeff = coeffTermToString(abs(coeff));
-        strPwr = varTermToString(power);
+        strCoeff = coeffTermToString(abs(coef));
+        strPwr = varTermToString(exp);
 
         result.append(strCoeff);
 
