@@ -5,6 +5,13 @@ import java.util.ListIterator;
 
 import static java.lang.Math.abs;
 
+/**
+ * MyPolynomial class that represents single-variable polynomials
+ * (with non-negative exponents) by using a circular doubly linked list.
+ *
+ * Each term in the polynomial is stored in one node as a two-element
+ * array where index 0 represents the coefficient and index 1 the exponent.
+ */
 public class MyPolynomial implements Iterable<Integer[]>{
     LinkedList <Integer[]> polyList = new LinkedList<>();
 
@@ -17,6 +24,10 @@ public class MyPolynomial implements Iterable<Integer[]>{
         removeZeroes(this);
     }
 
+    /**
+     * Constructor builds a new MyPolynomial from a LinkedList.
+     * @param terms LinkedList of Integer arrays.
+     */
     public MyPolynomial(LinkedList<Integer[]> terms){
         for (Integer[] term: terms){
             polyList.add(term);
@@ -62,8 +73,9 @@ public class MyPolynomial implements Iterable<Integer[]>{
     }
 
     /**
-     *  Sets the coefficient of the given exponent. If the term with the given exponent does not exist
-     *  and coef!=0, it is added to the polynomial.
+     *  Sets the coefficient of the given exponent. If the term with the
+     *  given exponent does not exist and coef!=0, it is added to the
+     *  polynomial.
      * @param coef Coeficient value to set
      * @param exp Exponent for which the coefficient will be set
      */
@@ -85,8 +97,10 @@ public class MyPolynomial implements Iterable<Integer[]>{
     }
 
     /**
-     * Compares this polynomial with the given polynomial and returns true if they are equal, false if not.
-     * @param otherPoly an instance of MyPolynomial to compare with this polynomial
+     * Compares this polynomial with the given polynomial and returns true
+     * if they are equal, false if not.
+     * @param otherPoly an instance of MyPolynomial to compare with this
+     *                  polynomial
      * @return true if the polynomials are equal, false if not
      */
     public boolean equals(MyPolynomial otherPoly){
@@ -99,13 +113,18 @@ public class MyPolynomial implements Iterable<Integer[]>{
             thisTerm = thisIter.next();
             otherTerm = otherIter.next();
 
-            if (!thisTerm[0].equals(otherTerm[0]) || !thisTerm[1].equals(otherTerm[1]))
+            if (!thisTerm[0].equals(otherTerm[0]) ||
+                !thisTerm[1].equals(otherTerm[1]))
                 return false;
         }
 
         return (!thisIter.hasNext() && !otherIter.hasNext());
     }
 
+    /**
+     * Computes the current size of the polynomial.
+     * @return integer size of the polynomial
+     */
     public int getSize(){
         return polyList.getSize();
     }
@@ -128,18 +147,25 @@ public class MyPolynomial implements Iterable<Integer[]>{
         if (result.indexOf("+") == 1)
             result.delete(0, 3);
 
-//        if (result.length() == 0)
-//            result.append("0");
-
         return result.toString().replaceFirst("\\s*", "");
 
     }
 
+    /**
+     * Adds this polynomial and the argument polynomial.
+     * @param other the polynomial to add.
+     * @return a new MyPolynomial of the resulting addition.
+     */
     public MyPolynomial add(MyPolynomial other){
         MyPolynomial copyOther = new MyPolynomial(other);
         return sum(copyOther);
     }
 
+    /**
+     * Subtracts argument polynomial from this polynomial.
+     * @param other the polynomial to subtract.
+     * @return a new MyPolynomial of the resulting subtraction.
+     */
     public MyPolynomial subtract(MyPolynomial other){
         MyPolynomial copyOther = new MyPolynomial(other);
         for (Integer[] term: copyOther){
@@ -148,6 +174,11 @@ public class MyPolynomial implements Iterable<Integer[]>{
         return sum(copyOther);
     }
 
+    /**
+     * Adds this polynomial and the argument polynomial.
+     * @param other the polynomial to add.
+     * @return a new MyPolynomial of the resulting addition.
+     */
     private MyPolynomial sum(MyPolynomial other){
 
         if (other.getSize() == 0)
@@ -179,7 +210,7 @@ public class MyPolynomial implements Iterable<Integer[]>{
                     itemThis = (iterThis.hasNext()) ? iterThis.next() : null;
                     itemResult = (iterResult.hasNext()) ? iterResult.next() : null;
 
-                } else if (comp < 0) {  // exponent of itemResult is smaller than itemThis
+                } else if (comp < 0) {  // exponent of itemResult smaller than itemThis
                     iterResult.previous();
                     iterResult.add(itemThis);
                     iterResult.next();
@@ -200,6 +231,11 @@ public class MyPolynomial implements Iterable<Integer[]>{
         return removeZeroes(result);
     }
 
+    /**
+     * Multiplies this polynomial by the argument polynomial.
+     * @param other the polynomial to multiply by.
+     * @return a new MyPolynomial of the resulting multiplication.
+     */
     public MyPolynomial multiply(MyPolynomial other){
         MyPolynomial result = new MyPolynomial(new Integer[][]{{0,0}});
 
@@ -231,6 +267,27 @@ public class MyPolynomial implements Iterable<Integer[]>{
         return result;
     }
 
+    /**
+     * Evaluates the polynomial by plugging the value of x.
+     * @param x value of the single variable in the polynomial to plug.
+     * @return result of the evaluation.
+     */
+    public int evaluate(int x){
+        int total = 0;
+        for (Integer[] term: polyList){
+            total += term[0] * Math.pow(x, term[1]);
+        }
+        return total;
+    }
+
+    /**
+     * Remove terms with coefficient==0. If the resulting polynomial has no
+     * terms, a single term of 0^0 is added.
+     * @param poly the polynomial to removed zero-coefficients from.
+     * @return the same polynomial received as argument, with
+     * zero-coefficients removed, or a single term of 0^0 if all coefficients
+     * were removed.
+     */
     private MyPolynomial removeZeroes(MyPolynomial poly){
         ListIterator<Integer[]> iter = poly.iterator();
         Integer[] term;

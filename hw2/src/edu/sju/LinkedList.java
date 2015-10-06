@@ -3,7 +3,6 @@ package edu.sju;
 
 import com.sun.istack.internal.NotNull;
 
-import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
@@ -13,13 +12,12 @@ import java.util.NoSuchElementException;
  * a single linked list data structure.
  * Only the following methods are provided:
  * get, set, add, remove, size, toString
- * @author Koffman and Wolfgang 
+ * Original author: Koffman and Wolfgang
+ * @author Amaury Rodriguez
  */
-public class LinkedList<E> implements Iterable<E>{
-
+public class LinkedList<E> implements Iterable<E> {
 
     // Nested Class
-    /*<listing chapter="2" number="1">*/
     /** A Node is the building block for the SingleLinkedList */
     private static class Node<E> {
 
@@ -120,6 +118,11 @@ public class LinkedList<E> implements Iterable<E>{
             return lastReturned.data;
         }
 
+        /**
+         * Replaces the last element returned by next or
+         * previous with the specified element
+         * @param item the element with which to replace the last element returned
+         */
         public void set(E item){
             if (lastReturned == null)
                 throw new IllegalStateException();
@@ -151,6 +154,10 @@ public class LinkedList<E> implements Iterable<E>{
             lastReturned = null;
         }
 
+        /**
+         * Inserts the specified element into the list immediately before nextNode.
+         * @param data element to insert.
+         */
         public void add(E data){
             Node<E> newNode = new Node<>(data);
 
@@ -347,8 +354,9 @@ public class LinkedList<E> implements Iterable<E>{
     }
 
     /**
-     * Removes the element at the specified position in this list. Shifts any subsequent elements to the left
-     * (subtracts one from their indices). Returns the element that was removed from the list.
+     * Removes the element at the specified position in this list. Shifts any
+     * subsequent elements to the left (subtracts one from their indices).
+     * Returns the element that was removed from the list.
      * @param index the index of the element to be removed
      * @return the element previously at the specified position
      */
@@ -418,10 +426,4 @@ public class LinkedList<E> implements Iterable<E>{
         sb.append("]");
         return sb.toString();
     }
-
-// Insert solution to programming exercise 3, section 5, chapter 2 here
-
-// Insert solution to programming exercise 4, section 5, chapter 2 here
-
-// Insert solution to programming exercise 2, section 5, chapter 2 here
 }

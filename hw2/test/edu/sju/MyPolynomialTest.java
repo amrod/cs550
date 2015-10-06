@@ -2,7 +2,6 @@ package edu.sju;
 
 import junit.framework.TestCase;
 
-
 public class MyPolynomialTest extends TestCase {
     MyPolynomial poly1;
     MyPolynomial poly2;
@@ -91,6 +90,8 @@ public class MyPolynomialTest extends TestCase {
         assertFalse(poly2.equals(poly3));
     }
 
+    /*  Test add() */
+
     public void testAddConmutation() throws Exception {
         MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
         MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}, {1, 0}});
@@ -141,7 +142,6 @@ public class MyPolynomialTest extends TestCase {
         result = polyB.add(polyA);
         assertTrue("Resulting Polynomial should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
     }
-
 
     /*  Test subtract() */
 
@@ -221,7 +221,7 @@ public class MyPolynomialTest extends TestCase {
         MyPolynomial result = polyA.multiply(polyB);
         assertTrue("Multiplication result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
     }
-//(10x^100+x^14+1)*(10x^100+x^2+1)*(10x^100+x^2)
+
     public void testMultiply3() throws Exception {
         MyPolynomial polyA = new MyPolynomial(new Integer[][] {{2, 2}, {1, 1}});
         MyPolynomial polyB = new MyPolynomial(new Integer[][] {{3, 2}, {-2, 0}});
@@ -258,5 +258,13 @@ public class MyPolynomialTest extends TestCase {
 
         assertTrue("Multiplication result should be 0", expected.equals(polyA.multiply(polyB)));
         assertTrue("Multiplication result should be 0", expected.equals(polyB.multiply(polyA)));
+    }
+
+    public void testEvaluate1() throws Exception {
+        poly1 = new MyPolynomial(new Integer[][] {{10, 5}, {1, 3}, {1, 0}});
+
+        assertEquals(1, poly1.evaluate(0));
+        assertEquals(12, poly1.evaluate(1));
+        assertEquals(329, poly1.evaluate(2));
     }
 }
