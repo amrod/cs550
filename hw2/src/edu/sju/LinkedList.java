@@ -134,13 +134,19 @@ public class LinkedList<E> implements Iterable<E>{
             if (lastReturned == null)
                 throw new IllegalStateException();
 
-            if (lastReturned.next == lastReturned) {
+            if (lastReturned.next == lastReturned) {  // One-element list
                 head = tail = null;
             }else {
                 lastReturned.previous.next = lastReturned.next;
                 lastReturned.next.previous = lastReturned.previous;
+
+                if (lastReturned == tail)
+                    tail = lastReturned.previous;
+                else if (lastReturned == head)
+                    head = lastReturned.next;
             }
 
+            index--;
             size--; // Decrease list size after removing an element.
             lastReturned = null;
         }

@@ -143,17 +143,17 @@ public class MyPolynomialTest extends TestCase {
     }
 
 
-    /*  =============  */
+    /*  Test subtract() */
 
-    public void testSubtractConmutation() throws Exception {
+    public void testSubtract1() throws Exception {
         MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
         MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}, {1, 0}});
-        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 100}, {1, 14}, {-1, 2}, {0, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{1, 14}, {-1, 2}});
 
         MyPolynomial result = polyA.subtract(polyB);
         assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
 
-        expected = new MyPolynomial(new Integer[][] {{0, 100}, {-1, 14}, {1, 2}, {0, 0}});
+        expected = new MyPolynomial(new Integer[][] {{-1, 14}, {1, 2}});
         result = polyB.subtract(polyA);
         assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
     }
@@ -161,7 +161,7 @@ public class MyPolynomialTest extends TestCase {
     public void testSubtract2() throws Exception {
         MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}});
         MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
-        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 100}, {-1, 14}, {1, 2}, {-1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{-1, 14}, {1, 2}, {-1, 0}});
 
         MyPolynomial result = polyA.subtract(polyB);
         assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
@@ -170,7 +170,7 @@ public class MyPolynomialTest extends TestCase {
     public void testSubtract3() throws Exception {
         MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}});
         MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
-        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 100}, {1, 14}, {-1, 2}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{1, 14}, {-1, 2}, {1, 0}});
 
         MyPolynomial result = polyB.subtract(polyA);
         assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
@@ -179,12 +179,12 @@ public class MyPolynomialTest extends TestCase {
     public void testSubtract4() throws Exception {
         MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}});
         MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 2}, {1, 0}});
-        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 100}, {-1, 14}, {-1, 2}, {-1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{-1, 14}, {-1, 2}, {-1, 0}});
 
         MyPolynomial result = polyA.subtract(polyB);
         assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
 
-        expected = new MyPolynomial(new Integer[][] {{0, 100}, {1, 14}, {1, 2}, {1, 0}});
+        expected = new MyPolynomial(new Integer[][] {{1, 14}, {1, 2}, {1, 0}});
         result = polyB.subtract(polyA);
         assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
     }
@@ -202,4 +202,61 @@ public class MyPolynomialTest extends TestCase {
         assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
     }
 
+    /*  Test multiply() */
+
+    public void testMultiply1() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{100, 200}, {10, 114}, {10, 102}, {20, 100}, {1, 16}, {1, 14}, {1,2}, {1, 0}});
+
+        MyPolynomial result = polyA.multiply(polyB);
+        assertTrue("Multiplication result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testMultiply2() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{100,200}, {10,114}, {10,102}, {10,100}, {1,16}, {1,2}});
+
+        MyPolynomial result = polyA.multiply(polyB);
+        assertTrue("Multiplication result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+//(10x^100+x^14+1)*(10x^100+x^2+1)*(10x^100+x^2)
+    public void testMultiply3() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{2, 2}, {1, 1}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{3, 2}, {-2, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{6, 4}, {3, 3}, {-4, 2}, {-2, 1}});
+
+        MyPolynomial result = polyA.multiply(polyB);
+        assertTrue("Multiplication result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testMultiply4() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{-3, 5}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{2, 3}, {-1, 1}, {2, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{-6,8}, {3,6}, {-6,5}});
+
+        MyPolynomial result = polyA.multiply(polyB);
+        assertTrue("Multiplication result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testMultiplyWithEmptyPolynomial() throws Exception {
+        MyPolynomial polyA = new MyPolynomial();
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 0}});
+
+        MyPolynomial result = polyA.multiply(polyB);
+        assertTrue("Multiplication result should be null, not " + result.toString(), result.equals(expected));
+        result = polyB.multiply(polyA);
+        assertTrue("Multiplication result should be null, not " + result.toString(), result.equals(expected));
+    }
+
+    public void testMultiplyByZero() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{0, 0}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 0}});
+
+        assertTrue("Multiplication result should be 0", expected.equals(polyA.multiply(polyB)));
+        assertTrue("Multiplication result should be 0", expected.equals(polyB.multiply(polyA)));
+    }
 }

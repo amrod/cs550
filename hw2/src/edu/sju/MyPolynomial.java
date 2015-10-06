@@ -14,10 +14,18 @@ public class MyPolynomial implements Iterable<Integer[]>{
         for (Integer[] term: terms){
             polyList.add(term);
         }
+        removeZeroes(this);
+    }
+
+    public MyPolynomial(LinkedList<Integer[]> terms){
+        for (Integer[] term: terms){
+            polyList.add(term);
+        }
+        removeZeroes(this);
     }
 
     /**
-     * COpy constructor: copies the given polynomial.
+     * Copy constructor: copies the given polynomial.
      * @param p a polynomial to copy.
      */
     public MyPolynomial(MyPolynomial p){
@@ -120,7 +128,11 @@ public class MyPolynomial implements Iterable<Integer[]>{
         if (result.indexOf("+") == 1)
             result.delete(0, 3);
 
+//        if (result.length() == 0)
+//            result.append("0");
+
         return result.toString().replaceFirst("\\s*", "");
+
     }
 
     public MyPolynomial add(MyPolynomial other){
@@ -185,10 +197,58 @@ public class MyPolynomial implements Iterable<Integer[]>{
             }
         }
 
+        return removeZeroes(result);
+    }
+
+    public MyPolynomial multiply(MyPolynomial other){
+        MyPolynomial result = new MyPolynomial(new Integer[][]{{0,0}});
+
+        if (other.getSize() == 0 || polyList.getSize() == 0)
+            return result;
+
+        LinkedList<MyPolynomial> polynomials = new LinkedList<>();
+        for (Integer[] term : this) {
+            LinkedList<Integer[]> currTerms = new LinkedList<>();
+
+            for (Integer[] otherTerm : other) {
+                Integer[] newTerm = new Integer[2];
+                newTerm[0] = term[0] * otherTerm[0];
+                newTerm[1] = term[1] + otherTerm[1];
+                currTerms.add(newTerm);
+            }
+
+            polynomials.add(new MyPolynomial(currTerms));
+        }
+
+        for (MyPolynomial p: polynomials){
+            if(result == null)
+                result = p;
+            else
+                result = result.add(p);
+        }
+
+        removeZeroes(result);
         return result;
     }
 
-    private String coeffTermToString(Integer coef){
+    private MyPolynomial removeZeroes(MyPolynomial poly){
+        ListIterator<Integer[]> iter = poly.iterator();
+        Integer[] term;
+
+        while (iter.hasNext()){
+            term = iter.next();
+            if (term[0] == 0){
+                iter.remove();
+            }
+        }
+
+        if (poly.getSize() == 0)
+            iter.add(new Integer[]{0,0});
+
+        return poly;
+    }
+
+    private String coefTermToString(Integer coef){
 
         if (coef == 1)
             return "";
@@ -213,7 +273,7 @@ public class MyPolynomial implements Iterable<Integer[]>{
         String strCoeff, strPwr;
         StringBuilder result = new StringBuilder();
 
-        strCoeff = coeffTermToString(abs(coef));
+        strCoeff = coefTermToString(abs(coef));
         strPwr = varTermToString(exp);
 
         result.append(strCoeff);
