@@ -1,6 +1,8 @@
 // A. Rodriguez: Based on Koffman and Wolfgang's SingleLinkedList. Modified into a double linked circular list.
 package edu.sju;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -94,6 +96,7 @@ public class LinkedList<E> implements Iterable<E>{
          * node's data value.
          * @return A data object of type E.
          */
+        @NotNull
         public E next(){
             if (!hasNext())
                 throw new NoSuchElementException();
@@ -105,6 +108,7 @@ public class LinkedList<E> implements Iterable<E>{
             return lastReturned.data;
         }
 
+        @NotNull
         public E previous() {
             if (!hasPrevious())
                 throw new NoSuchElementException();

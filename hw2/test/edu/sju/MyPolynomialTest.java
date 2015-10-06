@@ -82,10 +82,115 @@ public class MyPolynomialTest extends TestCase {
         assertFalse(poly2.equals(poly3));
     }
 
-    public void testAddSameLength() throws Exception {
-        MyPolynomial expected = new MyPolynomial(new Integer[][] {{20, 100}, {2, 14}, {2, 0}});
-        MyPolynomial poly3 = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
-        MyPolynomial result = poly2.add(poly3);
-        assertTrue(result.equals(expected));
+    public void testAddConmutation() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{20, 100}, {1, 14}, {1, 2}, {2, 0}});
+
+        MyPolynomial result = polyA.add(polyB);
+        assertTrue("Resulting Polynomial should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+        result = polyB.add(polyA);
+        assertTrue("Resulting Polynomial should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
     }
+
+    public void testAdd2() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{20, 100}, {1, 14}, {1, 2}, {1, 0}});
+
+        MyPolynomial result = polyA.add(polyB);
+        assertTrue("Resulting Polynomial should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testAdd3() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{20, 100}, {1, 14}, {1, 2}, {1, 0}});
+
+        MyPolynomial result = polyB.add(polyA);
+        assertTrue("Resulting Polynomial should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testAdd4() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 2}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{20, 100}, {1, 14}, {1, 2}, {1, 0}});
+
+        MyPolynomial result = polyA.add(polyB);
+        assertTrue("Resulting Polynomial should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+        result = polyB.add(polyA);
+        assertTrue("Resulting Polynomial should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testAddWithEmptyPolynomial() throws Exception {
+        MyPolynomial polyA = new MyPolynomial();
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+
+        MyPolynomial result = polyA.add(polyB);
+        assertTrue("Resulting Polynomial should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+        result = polyB.add(polyA);
+        assertTrue("Resulting Polynomial should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+
+    /*  =============  */
+
+    public void testSubtractConmutation() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 100}, {1, 14}, {-1, 2}, {0, 0}});
+
+        MyPolynomial result = polyA.subtract(polyB);
+        assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+
+        expected = new MyPolynomial(new Integer[][] {{0, 100}, {-1, 14}, {1, 2}, {0, 0}});
+        result = polyB.subtract(polyA);
+        assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testSubtract2() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 100}, {-1, 14}, {1, 2}, {-1, 0}});
+
+        MyPolynomial result = polyA.subtract(polyB);
+        assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testSubtract3() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}, {1, 2}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 100}, {1, 14}, {-1, 2}, {1, 0}});
+
+        MyPolynomial result = polyB.subtract(polyA);
+        assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testSubtract4() throws Exception {
+        MyPolynomial polyA = new MyPolynomial(new Integer[][] {{10, 100}});
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 2}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{0, 100}, {-1, 14}, {-1, 2}, {-1, 0}});
+
+        MyPolynomial result = polyA.subtract(polyB);
+        assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+
+        expected = new MyPolynomial(new Integer[][] {{0, 100}, {1, 14}, {1, 2}, {1, 0}});
+        result = polyB.subtract(polyA);
+        assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
+    public void testSubtractWithEmptyPolynomial() throws Exception {
+        MyPolynomial polyA = new MyPolynomial();
+        MyPolynomial polyB = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        MyPolynomial expected = new MyPolynomial(new Integer[][] {{-10, 100}, {-1, 14}, {-1, 0}});
+
+        MyPolynomial result = polyA.subtract(polyB);
+        assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+
+        expected = new MyPolynomial(new Integer[][] {{10, 100}, {1, 14}, {1, 0}});
+        result = polyB.add(polyA);
+        assertTrue("Subtraction result should be " + expected.toString() + ", not " + result.toString(), result.equals(expected));
+    }
+
 }

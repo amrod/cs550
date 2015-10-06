@@ -1,11 +1,18 @@
 package edu.sju;
 
-import javax.management.timer.TimerNotification;
 import java.util.Iterator;
+import java.util.ListIterator;
+
 import static java.lang.Math.abs;
 
 public class MyPolynomial implements Iterable<Integer[]>{
+    private int SUM = 0;
+    private int SUB = 1;
+    private int MUL = 2;
+
     LinkedList <Integer[]> polyList = new LinkedList<>();
+
+    public MyPolynomial(){}
 
     public MyPolynomial(Integer[][] terms){
         for (Integer[] term: terms){
@@ -13,14 +20,18 @@ public class MyPolynomial implements Iterable<Integer[]>{
         }
     }
 
+    /**
+     * COpy constructor: copies the given polynomial.
+     * @param p a polynomial to copy.
+     */
     public MyPolynomial(MyPolynomial p){
 
         for(Integer[] term: p){
-            polyList.add(term);
+            polyList.add(term.clone());
         }
     }
 
-    public Iterator<Integer[]> iterator(){
+    public ListIterator<Integer[]> iterator(){
         return polyList.iterator();
     }
 
@@ -91,9 +102,8 @@ public class MyPolynomial implements Iterable<Integer[]>{
         return (!thisIter.hasNext() && !otherIter.hasNext());
     }
 
-    public MyPolynomial add(MyPolynomial other){
-        MyPolynomial result = new MyPolynomial(new Integer[][] {{4, 5}});
-        return result;
+    public int getSize(){
+        return polyList.getSize();
     }
 
     @Override
@@ -113,6 +123,76 @@ public class MyPolynomial implements Iterable<Integer[]>{
             result.delete(0, 3);
 
         return result.toString();
+    }
+
+    public MyPolynomial add(MyPolynomial other){
+        MyPolynomial copyOther = new MyPolynomial(other);
+        return operate(copyOther, SUM);
+    }
+
+    public MyPolynomial subtract(MyPolynomial other){
+        MyPolynomial copyOther = new MyPolynomial(other);
+        for (Integer[] term: copyOther){
+            term[0] *= -1;
+        }
+        return operate(copyOther, SUM);
+    }
+
+    private MyPolynomial operate(MyPolynomial other, int operation){
+
+        if (other.getSize() == 0)
+            return new MyPolynomial(this);
+
+        if (this.getSize() == 0)
+            return other;
+
+        MyPolynomial result = new MyPolynomial(other);
+
+        ListIterator<Integer[]> iterThis = this.iterator();
+        ListIterator<Integer[]> iterResult = result.iterator();
+
+        Integer[] itemThis = iterThis.next();
+        Integer[] itemResult = iterResult.next();
+
+        while (true) {
+            int comp;
+
+            if (itemThis == null && itemResult == null)
+                break;
+
+            if (itemThis != null && itemResult != null) {
+                comp = itemResult[1].compareTo(itemThis[1]);
+                if (comp == 0) {  // exponents are equal
+
+                    if (operation == SUM)
+                        itemResult[0] += itemThis[0];
+                    else if (operation == MUL)
+                        itemResult[0] *= itemThis[0];
+                    else if (operation == SUB)
+                        itemResult[0] -= itemThis[0];
+
+                    itemThis = (iterThis.hasNext()) ? iterThis.next() : null;
+                    itemResult = (iterResult.hasNext()) ? iterResult.next() : null;
+
+                } else if (comp < 0) {  // exponent of itemResult is smaller than itemThis
+                    iterResult.previous();
+                    iterResult.add(itemThis);
+                    iterResult.next();
+                    itemThis = (iterThis.hasNext()) ? iterThis.next() : null;
+                } else {  // exponent of itemResult is bigger than itemThis
+                    itemResult = (iterResult.hasNext()) ? iterResult.next() : null;
+                }
+
+            } else if (itemResult == null) {
+                iterResult.add(itemThis);
+                itemThis = (iterThis.hasNext()) ? iterThis.next() : null;
+            }
+            else {  // itemThis == null
+                itemResult = (iterResult.hasNext()) ? iterResult.next() : null;
+            }
+        }
+
+        return result;
     }
 
     private String coeffTermToString(Integer coef){
