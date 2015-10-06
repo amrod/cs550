@@ -19,11 +19,20 @@ public class MyPolynomialTest extends TestCase {
 
     public void testToString1() throws Exception {
         assertEquals("10x^100 + x^14 + 1", poly1.toString());
-
     }
 
     public void testToString2() throws Exception {
         assertEquals("4x^5 - 2x^3 - 100x^2 + 40x", poly2.toString());
+    }
+
+    public void testToString3() throws Exception {
+        poly1 = new MyPolynomial(new Integer[][] {{0, 100}, {1, 14}, {1, 0}});
+        assertEquals("x^14 + 1", poly1.toString());
+    }
+
+    public void testToString4() throws Exception {
+        poly1 = new MyPolynomial(new Integer[][] {{0, 100}, {-1, 14}, {1, 0}});
+        assertEquals("- x^14 + 1", poly1.toString());
     }
 
     public void testGetCoefFirst() throws Exception {

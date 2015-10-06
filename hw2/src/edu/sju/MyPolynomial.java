@@ -6,10 +6,6 @@ import java.util.ListIterator;
 import static java.lang.Math.abs;
 
 public class MyPolynomial implements Iterable<Integer[]>{
-    private int SUM = 0;
-    private int SUB = 1;
-    private int MUL = 2;
-
     LinkedList <Integer[]> polyList = new LinkedList<>();
 
     public MyPolynomial(){}
@@ -115,6 +111,8 @@ public class MyPolynomial implements Iterable<Integer[]>{
                 result.append(" + ");
             else if (term[0] < 0)
                 result.append(" - ");
+            else
+                continue;
 
             result.append(termToString(abs(term[0]), term[1]));
         }
@@ -122,12 +120,12 @@ public class MyPolynomial implements Iterable<Integer[]>{
         if (result.indexOf("+") == 1)
             result.delete(0, 3);
 
-        return result.toString();
+        return result.toString().replaceFirst("\\s*", "");
     }
 
     public MyPolynomial add(MyPolynomial other){
         MyPolynomial copyOther = new MyPolynomial(other);
-        return operate(copyOther, SUM);
+        return sum(copyOther);
     }
 
     public MyPolynomial subtract(MyPolynomial other){
@@ -135,10 +133,10 @@ public class MyPolynomial implements Iterable<Integer[]>{
         for (Integer[] term: copyOther){
             term[0] *= -1;
         }
-        return operate(copyOther, SUM);
+        return sum(copyOther);
     }
 
-    private MyPolynomial operate(MyPolynomial other, int operation){
+    private MyPolynomial sum(MyPolynomial other){
 
         if (other.getSize() == 0)
             return new MyPolynomial(this);
@@ -164,12 +162,7 @@ public class MyPolynomial implements Iterable<Integer[]>{
                 comp = itemResult[1].compareTo(itemThis[1]);
                 if (comp == 0) {  // exponents are equal
 
-                    if (operation == SUM)
-                        itemResult[0] += itemThis[0];
-                    else if (operation == MUL)
-                        itemResult[0] *= itemThis[0];
-                    else if (operation == SUB)
-                        itemResult[0] -= itemThis[0];
+                    itemResult[0] += itemThis[0];
 
                     itemThis = (iterThis.hasNext()) ? iterThis.next() : null;
                     itemResult = (iterResult.hasNext()) ? iterResult.next() : null;
