@@ -1,6 +1,7 @@
 // A. Rodriguez: Based on Koffman and Wolfgang's SingleLinkedList. Modified into a double linked circular list.
 package edu.sju;
 
+import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
@@ -9,7 +10,7 @@ import java.util.NoSuchElementException;
  * capabilities required by the List interface using
  * a single linked list data structure.
  * Only the following methods are provided:
- * get, set, add, remove, getSize, toString
+ * get, set, add, remove, size, toString
  * @author Koffman and Wolfgang 
  */
 public class LinkedList<E> implements Iterable<E>{
@@ -55,12 +56,12 @@ public class LinkedList<E> implements Iterable<E>{
         public LLIterator(){}
 
         public LLIterator(int i){
-            if (i<0 || i > getSize())
+            if (i<0 || i > size)
                 throw new IndexOutOfBoundsException();
 
-            if (i == getSize()) {
+            if (i == size) {
                 nextNode = head; // redundant
-                index = getSize();
+                index = size;
             } else {
                 for (index=0; index < i; index++) {
                     nextNode = nextNode.next;
@@ -73,7 +74,7 @@ public class LinkedList<E> implements Iterable<E>{
          * @return true if there are nodes left, false if we're already at the tail.
          */
         public boolean hasNext(){
-            return index < getSize();
+            return index < size;
         }
 
         public boolean hasPrevious(){
@@ -148,11 +149,20 @@ public class LinkedList<E> implements Iterable<E>{
                 tail = newNode;
                 newNode.next = newNode;
                 newNode.previous = newNode;
-            } else {
+
+            }else{
                 newNode.next = nextNode;
                 newNode.previous = nextNode.previous;
+                nextNode.previous.next = newNode;
                 nextNode.previous = newNode;
+
+                if (index == size)
+                    tail = newNode;
+                else if (index == 0)
+                    head = newNode;
             }
+
+            index++;
             size++;
             lastReturned = null;
         }
@@ -171,32 +181,20 @@ public class LinkedList<E> implements Iterable<E>{
      *	@param item The item to be inserted
      */
     private void addFirst(E item) {
-        if (head == null){
-            head = new Node<>(item);
-            head.next = head;
-            head.previous = head;
-            tail = head;
-        } else {
-            head = new Node<>(item, head.previous, head);
-            tail.next = head;
-        }
-        size++;
+        addAt(item, 0);
     }
 
     /** Insert an item as the last item of the list.
      *	@param item The item to be inserted
      */
     private void addLast(E item) {
-        if (head == null){
-            addFirst(item);
-        } else {
-            tail = new Node<>(item, tail, tail.next);
-            tail.previous.next = tail;
-            head.previous = tail;
-            size++;
-        }
+        addAt(item, size);
     }
 
+    private void addAt(E item, int index) {
+        ListIterator<E> iter = iterator(index);
+        iter.add(item);
+    }
     /**
      * Add a node after a given node
      * @param node The node which the new item is inserted after
@@ -223,15 +221,12 @@ public class LinkedList<E> implements Iterable<E>{
      * @return The removed node's data or null if the list is empty
      */
     private E removeFirst() {
-        ListIterator<E> iter = iterator(0);
-        E item = iter.next();
-        iter.remove();
-        return item;
+        return removeAt(0);
     }
 
     /**
      * Remove the node after a given node
-     * @param node The node before the one to be removed
+     * @param index The node before the one to be removed
      * @return The data from the removed node, or null
      *          if there is no node to remove
      */
@@ -370,14 +365,14 @@ public class LinkedList<E> implements Iterable<E>{
      * @return The removed node's data or null if the list is empty
      */
     public E removeLast() {
-        ListIterator<E> iter = iterator(getSize());
+        ListIterator<E> iter = iterator(size);
         E item = iter.previous();
         iter.remove();
         return item;
     }
 
     /**
-     * Query the getSize of the list
+     * Query the size of the list
      * @return The number of objects in the list
      */
     int getSize() {
@@ -391,7 +386,7 @@ public class LinkedList<E> implements Iterable<E>{
             node = node.next;
 
         assert size == count;
-        return count;
+        return size;
     }
 
     /**

@@ -2,6 +2,8 @@ package edu.sju;
 
 import junit.framework.TestCase;
 
+import java.util.ListIterator;
+
 
 public class LinkedListTest extends TestCase {
 
@@ -107,9 +109,17 @@ public class LinkedListTest extends TestCase {
     }
 
     public void testAddAtEnd2() throws Exception {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("foo");
+        assertEquals("foo", list.get(0));
+        list.add("bar");
+        assertEquals("bar", list.get(1));
+    }
+
+    public void testAddAtEnd3() throws Exception {
         empty.add("foo");
         assertEquals(1, empty.getSize());
-        one.add("foo");
+        one.add("banana");
         assertEquals(2, one.getSize());
         multiple.add("foo");
         assertEquals(4, multiple.getSize());
@@ -137,13 +147,24 @@ public class LinkedListTest extends TestCase {
         assertEquals("Check correct value is returned when removing last element", "foo", multiple.remove());
     }
 
-    public void testRemoveAtIndex() throws Exception {
+    public void testRemoveAtIndexOne() throws Exception {
         assertEquals("foo", one.remove(0));
         assertEquals("Check list is empty after removing last element", 0, one.getSize());
+    }
+
+    public void testRemoveAtIndexMultipleReturnsElements() throws Exception {
         assertEquals("bar", multiple.remove(1));
         assertEquals("baz", multiple.remove(1));
-        assertEquals(1, multiple.getSize());
+        assertEquals("foo", multiple.remove(0));
+    }
+
+    public void testRemoveAtIndexMultipleReportsCorrectSize() throws Exception {
+        multiple.remove(1);
+        assertEquals("Check list size is 1 after removing element", 2, multiple.getSize());
+        multiple.remove(1);
         assertEquals("Check list size is 1 after removing element", 1, multiple.getSize());
+        multiple.remove(0);
+        assertEquals("Check list size is 1 after removing element", 0, multiple.getSize());
     }
 
     public void testRemoveLastMultipleChangesSize() throws Exception {
@@ -162,5 +183,12 @@ public class LinkedListTest extends TestCase {
     public void testRemoveLastOneElmentEmptyList() throws Exception {
         one.removeLast();
         assertEquals("Check list is empty after removing last element", 0, one.getSize());
+    }
+
+    public void testIterarorAddIncrementsIndex() throws Exception {
+        ListIterator<String> iter = empty.iterator();
+        iter.add("foo");
+        assertEquals(1, iter.nextIndex());
+        assertEquals(0, iter.previousIndex());
     }
 }
