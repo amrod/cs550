@@ -233,4 +233,42 @@ public class KDTree {
 
         return smallest;
     }
+
+    /**
+     * Finds the point with the largest value in the d-th dimension. Let d=0
+     * represent the x dimension, d=1 represent the y dimension.
+     * @param d Dimension
+     * @return The pint with the largest value on dimension d found so
+     *                 far, or null if tree is empty.
+     */
+    public Point2D findMax(int d){
+        if (root == null)
+            return null;
+        else
+            return findMax(root, d, root.data);
+    }
+
+    /**
+     *  Recursively finds the point with the largest value in the d-th
+     *  dimension. Let d=0 represent the x dimension, d=1 represent the y
+     *  dimension.
+     * @param localRoot Root of the tree to analyze.
+     * @param d Dimension
+     * @param largest The pint with the largest value on dimension d found so
+     *                 far.
+     * @return The point with the largest value in dimension d found in the
+     * tree.
+     */
+    private Point2D findMax(Node localRoot, int d, Point2D largest){
+        if (localRoot == null)
+            return largest;
+
+        if (localRoot.data.getAtIndex(d) > largest.getAtIndex(d))
+            largest = localRoot.data;
+
+        largest = findMax(localRoot.left, d, largest);
+        largest = findMax(localRoot.right, d, largest);
+
+        return largest;
+    }
 }

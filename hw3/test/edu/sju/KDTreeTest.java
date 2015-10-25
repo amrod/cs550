@@ -166,4 +166,58 @@ public class KDTreeTest {
 
         Assert.assertNull(p);
     }
+    
+    /*********************************************/
+
+    @Test
+    public void testFindMax1() {
+        Point2D p = t1.findMax(0);
+
+        Assert.assertEquals(1.0, p.getAtIndex(0));
+        Assert.assertEquals(1.0, p.getAtIndex(1));
+    }
+
+    @Test
+    public void testFindMax2() {
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2),
+                new KDTree(5, 5, null, new KDTree(6, 6)));
+
+        Point2D p = t.findMax(0);
+
+        Assert.assertEquals(6.0, p.getAtIndex(0));
+        Assert.assertEquals(6.0, p.getAtIndex(1));
+    }
+
+    @Test
+    public void testFindMaxDim0() {
+        KDTree t = new KDTree(4, 4,
+                new KDTree(2, 2),
+                new KDTree(5, 5, new KDTree(6, 4), new KDTree(0, 6)));
+
+        Point2D p = t.findMax(0);
+
+        Assert.assertEquals(6.0, p.getAtIndex(0));
+        Assert.assertEquals(4.0, p.getAtIndex(1));
+    }
+
+    @Test
+    public void testFindMaxDim1() {
+        KDTree t = new KDTree(4, 4,
+                new KDTree(3.9, 10),
+                new KDTree(5, 5, new KDTree(6, 2.5), new KDTree(0, 6)));
+
+        Point2D p = t.findMax(1);
+
+        Assert.assertEquals(3.9, p.getAtIndex(0));
+        Assert.assertEquals(10.0, p.getAtIndex(1));
+    }
+
+    @Test
+    public void testFindMaxNull() {
+        KDTree t = new KDTree();
+
+        Point2D p = t.findMax(1);
+
+        Assert.assertNull(p);
+    }
 }
