@@ -13,7 +13,7 @@ class Point2D{
         return (other.x == this.x && other.y == this.y);
     }
 
-    public double getIndex(int i){
+    public double getAtIndex(int i){
         if (i == 0)
             return x;
         else if(i == 1)
@@ -22,4 +22,7 @@ class Point2D{
             throw new IndexOutOfBoundsException();
     }
 
+    public static int getSize(){
+        return 2;
+    }
 }

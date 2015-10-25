@@ -3,6 +3,7 @@ package edu.sju;
 public class KDTree {
 
     Node root;
+    boolean addReturn;
 
     public class Node{
         Point2D data;
@@ -60,17 +61,23 @@ public class KDTree {
     }
 
     public void insert(Point2D p){
-//        insert(p, 0);
+        root = insert(root, p, 0);
     }
 
-//    private KDTree insert(Point2D p, int depth){
-//        int axis = depth % 2;
-//
-//        if(p.getIndex(axis) < this.data.getIndex(axis)){
-//            if(left == null)
-//                left = new KDTree(p);
-//            left.insert(p, depth +1);
-//        }
-//    }
+    private Node insert(Node localRoot, Point2D p, int depth){
+        int axis = depth % Point2D.getSize();
+
+        if (localRoot == null){
+            addReturn = true;
+            return new Node(p);
+        }
+
+        if (p.getAtIndex(axis) < this.root.data.getAtIndex(axis))
+            localRoot.left = insert(localRoot.left, p, depth + 1);
+        else
+            localRoot.right = insert(localRoot.right, p, depth + 1);
+
+        return localRoot;
+    }
 
 }

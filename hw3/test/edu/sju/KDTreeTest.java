@@ -41,10 +41,29 @@ public class KDTreeTest {
     }
 
     @Test
-    public void testInsert() {
+    public void testInsert1() {
         t1.insert(new Point2D(2, 2));
         Assert.assertTrue(t1.equals(new KDTree(1, 1, null, new KDTree(2, 2))));
     }
 
+    @Test
+    public void testInsert2() {
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5));
+        KDTree t2 = new KDTree(4, 4, new KDTree(2, 2, new KDTree(1, 1), null), new KDTree(5, 5));
+
+        t.insert(new Point2D(1, 1));
+
+        Assert.assertTrue(t.equals(t2));
+    }
+
+    @Test
+    public void testInsert3() {
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5));
+        KDTree t2 = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null, new KDTree(6, 6)));
+
+        t.insert(new Point2D(6, 6));
+
+        Assert.assertTrue(t.equals(t2));
+    }
 
 }
