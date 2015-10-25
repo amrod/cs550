@@ -12,6 +12,12 @@ public class KDTree {
         right = null;
     }
 
+    public KDTree(double x, double y, KDTree left, KDTree right) {
+        data = new Point2D(x, y);
+        this.left = left;
+        this.right = right;
+    }
+
     public boolean equals(KDTree other){
         if (this.left == null && other.left != null ||
                 this.left != null && other.left == null) {
@@ -24,8 +30,8 @@ public class KDTree {
         }
 
         if (this.data.equals(other.data)) {
-            boolean lEq = false;
-            boolean rEq = false;
+            boolean lEq = true;
+            boolean rEq = true;
 
             if (this.left != null){
                 lEq = this.left.equals(other.left);
