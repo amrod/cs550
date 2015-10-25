@@ -66,4 +66,32 @@ public class KDTreeTest {
         Assert.assertTrue(t.equals(t2));
     }
 
+    @Test
+    public void testSearch1() {
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null, new KDTree(6, 6)));
+
+        Point2D result = t.search(new Point2D(6, 6));
+
+        Assert.assertEquals(result.getAtIndex(0), 6.0);
+        Assert.assertEquals(result.getAtIndex(1), 6.0);
+    }
+
+    @Test
+    public void testSearch2() {
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null, new KDTree(6, 6)));
+
+        Point2D result = t.search(new Point2D(4, 4));
+
+        Assert.assertEquals(result.getAtIndex(0), 4.0);
+        Assert.assertEquals(result.getAtIndex(1), 4.0);
+    }
+
+    @Test
+    public void testSearch3() {
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null, new KDTree(6, 6)));
+
+        Point2D result = t.search(new Point2D(7, 7));
+
+        Assert.assertNull(result);
+    }
 }

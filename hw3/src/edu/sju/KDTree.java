@@ -124,7 +124,7 @@ public class KDTree {
             return new Node(p);
         }
 
-        if (p.getAtIndex(axis) < this.root.data.getAtIndex(axis))
+        if (p.getAtIndex(axis) < localRoot.data.getAtIndex(axis))
             localRoot.left = insert(localRoot.left, p, depth + 1);
         else
             localRoot.right = insert(localRoot.right, p, depth + 1);
@@ -132,4 +132,34 @@ public class KDTree {
         return localRoot;
     }
 
+    /**
+     * Search for coordinates p in this tree.
+     * @param point Coordinate pair to search for.
+     * @return The point if found, null otherwise.
+     */
+    public Point2D search(Point2D point){
+        return search(root, point, 0);
+    }
+
+    /**
+     * Search for coordinates p in tree rooted at localRoot.
+     * @param localRoot Root of tree where to search.
+     * @param p Coordinate pair to search for.
+     * @param depth current depth in the tree.
+     * @return The point if found, null otherwise.
+     */
+    private Point2D search(Node localRoot, Point2D p, int depth){
+        int axis = depth % Point2D.getSize();
+
+        if (localRoot == null)
+            return null;
+
+        if (localRoot.data.equals(p))
+            return new Point2D(localRoot.data.x, localRoot.data.y);
+
+        if (p.getAtIndex(axis) < localRoot.data.getAtIndex(axis))
+            return search(localRoot.left, p, depth + 1);
+        else
+            return search(localRoot.right, p, depth + 1);
+    }
 }
