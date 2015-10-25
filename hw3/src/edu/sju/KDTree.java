@@ -162,4 +162,36 @@ public class KDTree {
         else
             return search(localRoot.right, p, depth + 1);
     }
+
+    /**
+     * Builds a text representation of this tree using a preorder traversal.
+     * @return The String representation of the tree.
+     */
+    public String toString(){
+        StringBuilder stb = new StringBuilder();
+        preOrderToString(root, stb, 0);
+        return stb.toString();
+    }
+
+    /**
+     * Creates a text representation of the tree rooted at localRoot using a
+     * preorder traversal.
+     * @param localRoot Root of the tree to build string representation.
+     * @param stb StringBuilder instance where to build the text representation.
+     * @param depth Depth of the current node within the tree.
+     */
+    private void preOrderToString(Node localRoot, StringBuilder stb, int depth){
+
+        for (int i = 0; i < depth; i++)
+            stb.append("\t");
+
+        if (localRoot == null){
+            stb.append("null\n");
+        }else {
+            stb.append(String.format("(%1$s, %2$s)\n", localRoot.data.x,
+                    localRoot.data.y));
+            preOrderToString(localRoot.left, stb, depth + 1);
+            preOrderToString(localRoot.right, stb, depth + 1);
+        }
+    }
 }

@@ -49,7 +49,8 @@ public class KDTreeTest {
     @Test
     public void testInsert2() {
         KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5));
-        KDTree t2 = new KDTree(4, 4, new KDTree(2, 2, new KDTree(1, 1), null), new KDTree(5, 5));
+        KDTree t2 = new KDTree(4, 4, new KDTree(2, 2, new KDTree(1, 1), null),
+                new KDTree(5, 5));
 
         t.insert(new Point2D(1, 1));
 
@@ -59,7 +60,8 @@ public class KDTreeTest {
     @Test
     public void testInsert3() {
         KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5));
-        KDTree t2 = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null, new KDTree(6, 6)));
+        KDTree t2 = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
+                new KDTree(6, 6)));
 
         t.insert(new Point2D(6, 6));
 
@@ -68,30 +70,48 @@ public class KDTreeTest {
 
     @Test
     public void testSearch1() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null, new KDTree(6, 6)));
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
+                new KDTree(6, 6)));
 
         Point2D result = t.search(new Point2D(6, 6));
 
-        Assert.assertEquals(result.getAtIndex(0), 6.0);
-        Assert.assertEquals(result.getAtIndex(1), 6.0);
+        Assert.assertEquals(6.0, result.getAtIndex(0));
+        Assert.assertEquals(6.0, result.getAtIndex(1));
     }
 
     @Test
     public void testSearch2() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null, new KDTree(6, 6)));
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
+                new KDTree(6, 6)));
 
         Point2D result = t.search(new Point2D(4, 4));
 
-        Assert.assertEquals(result.getAtIndex(0), 4.0);
-        Assert.assertEquals(result.getAtIndex(1), 4.0);
+        Assert.assertEquals(4.0, result.getAtIndex(0));
+        Assert.assertEquals(4.0, result.getAtIndex(1));
     }
 
     @Test
     public void testSearch3() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null, new KDTree(6, 6)));
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
+                new KDTree(6, 6)));
 
         Point2D result = t.search(new Point2D(7, 7));
 
         Assert.assertNull(result);
+    }
+
+    @Test
+    public void testToString1() {
+        Assert.assertEquals("(1.0, 1.0)\n\tnull\n\tnull\n", t1.toString());
+    }
+
+    @Test
+    public void testToString2() {
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
+                new KDTree(6, 6)));
+
+        Assert.assertEquals("(4.0, 4.0)\n\t(2.0, 2.0)\n\t\tnull\n\t\tnull" +
+                "\n\t(5.0, 5.0)\n\t\tnull\n\t\t(6.0, 6.0)\n\t\t\tnull" +
+                "\n\t\t\tnull\n", t.toString());
     }
 }
