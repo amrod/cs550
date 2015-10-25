@@ -10,12 +10,21 @@ public class KDTree {
         Node left;
         Node right;
 
+        /**
+         * Constructor creates a Node given the x and y coordinates.
+         * @param x Coordinate on x axis
+         * @param y Coordinate on y axis
+         */
         public Node(double x, double y){
             this.data = new Point2D(x, y);
             this.left = null;
             this.right = null;
         }
 
+        /**
+         * Constructor creates a Node given the Points2D coordinate pair.
+         * @param p Previously-instantiated Point2D
+         */
         public Node(Point2D p){
             this.data = p;
             this.left = null;
@@ -23,18 +32,38 @@ public class KDTree {
         }
     }
 
+    /**
+     * Constructor creates an KDTree.
+     */
     public  KDTree(){
         root = null;
     }
 
+    /**
+     * Constructor creates a KDTree with a single node.
+     * @param x Coordinate on x axis.
+     * @param y Coordinate on y axis.
+     */
     public KDTree(double x, double y) {
         this.root = new Node(x, y);
     }
 
+    /**
+     * Constructor creates a KDTree given the Point2D coordinate pair.
+     * @param p Previously-instantiated Point2D
+     */
     public KDTree(Point2D p){
         this.root = new Node(p);
     }
 
+    /**
+     * Constructor creates a KDTree given the x and y coordinates and left and
+     * right subtrees.
+     * @param x Coordinate on x axis
+     * @param y Coordinate on y axis
+     * @param left Left subtree
+     * @param right Right subtree
+     */
     public KDTree(double x, double y, KDTree left, KDTree right) {
         root = new Node(x, y);
         if (left != null)
@@ -43,10 +72,22 @@ public class KDTree {
             this.root.right = right.root;
     }
 
+    /**
+     * Compares this tree with other and returns true if they are equal, false
+     * otherwise.
+     * @param other The KDTree to compare against.
+     * @return true if the trees are identical, false otherwise.
+     */
     public boolean equals(KDTree other){
         return equals(root, other.root);
     }
 
+    /**
+     * Recursively compares two trees starting from the given roots.
+     * @param localRoot Root node of local tree.
+     * @param otherRoot Root node of tree to compare against.
+     * @return true if the trees are identical, false otherwise.
+     */
     private boolean equals(Node localRoot, Node otherRoot){
         if (localRoot == null && otherRoot == null)
             return true;
@@ -60,10 +101,21 @@ public class KDTree {
         return false;
     }
 
+    /**
+     * Inserts a new node in this tree.
+     * @param p Coordinate pair to initialize the new node with.
+     */
     public void insert(Point2D p){
         root = insert(root, p, 0);
     }
 
+    /**
+     * Inserts a new node in tree rooted at localRoot.
+     * @param localRoot Root of tree where to insert the node.
+     * @param p Coordinate pair to initialize the new node with.
+     * @param depth current depth in the tree.
+     * @return The root of the tree received, with the new node added.
+     */
     private Node insert(Node localRoot, Point2D p, int depth){
         int axis = depth % Point2D.getSize();
 
