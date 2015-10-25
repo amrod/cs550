@@ -1,5 +1,6 @@
 package edu.sju;
 
+
 public class KDTree {
 
     Node root;
@@ -193,5 +194,43 @@ public class KDTree {
             preOrderToString(localRoot.left, stb, depth + 1);
             preOrderToString(localRoot.right, stb, depth + 1);
         }
+    }
+
+    /**
+     * Finds the point with the smallest value in the d-th dimension. Let d=0
+     * represent the x dimension, d=1 represent the y dimension.
+     * @param d Dimension
+     * @return The pint with the smallest value on dimension d found so
+     *                 far, or null if tree is empty.
+     */
+    public Point2D findMin(int d){
+        if (root == null)
+            return null;
+        else
+            return findMin(root, d, root.data);
+    }
+
+    /**
+     *  Recursively finds the point with the smallest value in the d-th
+     *  dimension. Let d=0 represent the x dimension, d=1 represent the y
+     *  dimension.
+     * @param localRoot Root of the tree to analyze.
+     * @param d Dimension
+     * @param smallest The pint with the smallest value on dimension d found so
+     *                 far.
+     * @return The point with the smallest value in dimension d found in the
+     * tree.
+     */
+    private Point2D findMin(Node localRoot, int d, Point2D smallest){
+        if (localRoot == null)
+            return smallest;
+
+        if (localRoot.data.getAtIndex(d) < smallest.getAtIndex(d))
+            smallest = localRoot.data;
+
+        smallest = findMin(localRoot.left, d, smallest);
+        smallest = findMin(localRoot.right, d, smallest);
+
+        return smallest;
     }
 }

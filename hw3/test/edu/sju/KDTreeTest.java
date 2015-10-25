@@ -114,4 +114,56 @@ public class KDTreeTest {
                 "\n\t(5.0, 5.0)\n\t\tnull\n\t\t(6.0, 6.0)\n\t\t\tnull" +
                 "\n\t\t\tnull\n", t.toString());
     }
+
+    @Test
+    public void testFindMin1() {
+        Point2D p = t1.findMin(0);
+
+        Assert.assertEquals(1.0, p.getAtIndex(0));
+        Assert.assertEquals(1.0, p.getAtIndex(1));
+    }
+
+    @Test
+    public void testFindMin2() {
+        KDTree t = new KDTree(4, 4, new KDTree(2, 2),
+                new KDTree(5, 5, null, new KDTree(6, 6)));
+
+        Point2D p = t.findMin(0);
+
+        Assert.assertEquals(2.0, p.getAtIndex(0));
+        Assert.assertEquals(2.0, p.getAtIndex(1));
+    }
+
+    @Test
+    public void testFindMinDim0() {
+        KDTree t = new KDTree(4, 4,
+                new KDTree(2, 2),
+                new KDTree(5, 5, new KDTree(6, 4), new KDTree(0, 6)));
+
+        Point2D p = t.findMin(0);
+
+        Assert.assertEquals(0.0, p.getAtIndex(0));
+        Assert.assertEquals(6.0, p.getAtIndex(1));
+    }
+
+    @Test
+    public void testFindMinDim1() {
+        KDTree t = new KDTree(4, 4,
+                new KDTree(3.9, 3.9),
+                new KDTree(5, 5, new KDTree(6, 2.5), new KDTree(0, 6)));
+
+        Point2D p = t.findMin(1);
+
+        Assert.assertEquals(6.0, p.getAtIndex(0));
+        Assert.assertEquals(2.5, p.getAtIndex(1));
+    }
+
+    @Test
+    public void testFindMinNull() {
+        KDTree t = new KDTree();
+
+        Point2D p = t.findMin(1);
+
+        Assert.assertNull(p);
+    }
 }
