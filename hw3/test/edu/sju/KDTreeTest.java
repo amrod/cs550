@@ -39,9 +39,11 @@ public class KDTreeTest {
         KDTree b = new KDTree(1, 2, new KDTree(3, 4), new KDTree(5, 5));
         Assert.assertFalse("Not equals", a.equals(b));
     }
-    
+
+    @Test
     public void testInsert() {
-        t1.insert(new Point2D(2, 1));
+        t1.insert(new Point2D(2, 2));
+        Assert.assertTrue(t1.equals(new KDTree(1, 1, null, new KDTree(2, 2))));
     }
 
 

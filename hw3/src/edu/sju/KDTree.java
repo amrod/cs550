@@ -2,54 +2,75 @@ package edu.sju;
 
 public class KDTree {
 
-    Point2D data;
-    KDTree left;
-    KDTree right;
+    Node root;
+
+    public class Node{
+        Point2D data;
+        Node left;
+        Node right;
+
+        public Node(double x, double y){
+            this.data = new Point2D(x, y);
+            this.left = null;
+            this.right = null;
+        }
+
+        public Node(Point2D p){
+            this.data = p;
+            this.left = null;
+            this.right = null;
+        }
+    }
+
+    public  KDTree(){
+        root = null;
+    }
 
     public KDTree(double x, double y) {
-        data = new Point2D(x, y);
-        left = null;
-        right = null;
+        this.root = new Node(x, y);
+    }
+
+    public KDTree(Point2D p){
+        this.root = new Node(p);
     }
 
     public KDTree(double x, double y, KDTree left, KDTree right) {
-        data = new Point2D(x, y);
-        this.left = left;
-        this.right = right;
+        root = new Node(x, y);
+        if (left != null)
+            this.root.left = left.root;
+        if (right != null)
+            this.root.right = right.root;
     }
 
     public boolean equals(KDTree other){
-        if (this.left == null && other.left != null ||
-                this.left != null && other.left == null) {
+        return equals(root, other.root);
+    }
+
+    private boolean equals(Node localRoot, Node otherRoot){
+        if (localRoot == null && otherRoot == null)
+            return true;
+        else if (localRoot == null || otherRoot == null)
             return false;
+
+        if (localRoot.data.equals(otherRoot.data)){
+            return (equals(localRoot.left, otherRoot.left) &&
+                    equals(localRoot.right, otherRoot.right));
         }
-
-        if (this.right == null && other.right != null ||
-                this.right != null && other.right == null) {
-            return false;
-        }
-
-        if (this.data.equals(other.data)) {
-            boolean lEq = true;
-            boolean rEq = true;
-
-            if (this.left != null){
-                lEq = this.left.equals(other.left);
-            }
-
-            if (this.right != null){
-                rEq = this.right.equals(other.right);
-            }
-
-            return (lEq && rEq);
-        }
-
         return false;
-
     }
 
     public void insert(Point2D p){
-
+//        insert(p, 0);
     }
+
+//    private KDTree insert(Point2D p, int depth){
+//        int axis = depth % 2;
+//
+//        if(p.getIndex(axis) < this.data.getIndex(axis)){
+//            if(left == null)
+//                left = new KDTree(p);
+//            left.insert(p, depth +1);
+//        }
+//    }
 
 }

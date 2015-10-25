@@ -12,4 +12,14 @@ class Point2D{
     public boolean equals(Point2D other){
         return (other.x == this.x && other.y == this.y);
     }
+
+    public double getIndex(int i){
+        if (i == 0)
+            return x;
+        else if(i == 1)
+            return y;
+        else
+            throw new IndexOutOfBoundsException();
+    }
+
 }
