@@ -272,5 +272,73 @@ public class KDTree2D {
         return largest;
     }
 
+    /**
+     * Prints all the points in the tree that lie within the rectangular range
+     * defined by lowerleftcorner and upperrightcorner (borders included).
+     * @param lowerleftcorner Lower left corner of the rectangular range.
+     * @param upperrightcorner Upper right corner of the rectangular range.
+     */
+    public void printRange(Point2D lowerleftcorner, Point2D upperrightcorner){
+        StringBuilder stb = new StringBuilder();
+        traverseRange(root, stb, lowerleftcorner, upperrightcorner);
+        if (stb.length() > 1)
+            stb.setLength(stb.length() - 2);
+        System.out.print(stb.toString());
+    }
 
+    /**
+     * Recursively traverses the tree and populates stb with all the points in
+     * that lie within the rectangular range defined by llc and urc (borders
+     * included).
+     * @param localRoot Current tree root
+     * @param stb StringBuilder to collect points found.
+     * @param llc Lower left corner of the rectangular range.
+     * @param urc Upper right corner of the rectangular range.
+     */
+    private void traverseRange(Node localRoot, StringBuilder stb, Point2D llc,
+                               Point2D urc){
+
+        if (localRoot != null){
+
+            if (inRange(localRoot.data, llc, urc)) {
+                stb.append(String.format("(%1$s, %2$s), ", localRoot.data.x,
+                        localRoot.data.y));
+            }
+
+            if (greaterThanLowerLeftCorner(localRoot.data, llc, urc))
+                traverseRange(localRoot.left, stb, llc, urc);
+
+            if (lowerThanUpperRighttCorner(localRoot.data, llc, urc))
+                traverseRange(localRoot.right, stb, llc, urc);
+        }
+    }
+
+    /***
+     * Compares a Point2D coordinate pair with a rectangular range and
+     * determines if the point is within that range (borders included)
+     * @param point Point to compare against range.
+     * @param llc Lower left corner of the rectangular range.
+     * @param urc Upper right corner of the rectangular range.
+     * @return True if the point is within the range, false if not.
+     */
+    private boolean inRange(Point2D point, Point2D llc, Point2D urc){
+        if (greaterThanLowerLeftCorner(point, llc, urc))
+            if (lowerThanUpperRighttCorner(point, llc, urc))
+                return true;
+        return false;
+    }
+
+    private boolean greaterThanLowerLeftCorner(Point2D point, Point2D llc,
+                                               Point2D urc){
+        if (point.x >= llc.x && point.y >= llc.y)
+                return true;
+        return false;
+    }
+
+    private boolean lowerThanUpperRighttCorner(Point2D point, Point2D llc,
+                                             Point2D urc){
+        if (point.x <= urc.x && point.y <= urc.y)
+            return true;
+        return false;
+    }
 }
