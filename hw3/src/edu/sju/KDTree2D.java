@@ -1,7 +1,7 @@
 package edu.sju;
 
 
-public class KDTree {
+public class KDTree2D {
 
     Node root;
     boolean addReturn;
@@ -34,38 +34,38 @@ public class KDTree {
     }
 
     /**
-     * Constructor creates an KDTree.
+     * Constructor creates an empty KDTree2D.
      */
-    public  KDTree(){
+    public KDTree2D(){
         root = null;
     }
 
     /**
-     * Constructor creates a KDTree with a single node.
+     * Constructor creates a KDTree2D with a single node.
      * @param x Coordinate on x axis.
      * @param y Coordinate on y axis.
      */
-    public KDTree(double x, double y) {
+    public KDTree2D(double x, double y) {
         this.root = new Node(x, y);
     }
 
     /**
-     * Constructor creates a KDTree given the Point2D coordinate pair.
+     * Constructor creates a KDTree2D given the Point2D coordinate pair.
      * @param p Previously-instantiated Point2D
      */
-    public KDTree(Point2D p){
+    public KDTree2D(Point2D p){
         this.root = new Node(p);
     }
 
     /**
-     * Constructor creates a KDTree given the x and y coordinates and left and
+     * Constructor creates a KDTree2D given the x and y coordinates and left and
      * right subtrees.
      * @param x Coordinate on x axis
      * @param y Coordinate on y axis
      * @param left Left subtree
      * @param right Right subtree
      */
-    public KDTree(double x, double y, KDTree left, KDTree right) {
+    public KDTree2D(double x, double y, KDTree2D left, KDTree2D right) {
         root = new Node(x, y);
         if (left != null)
             this.root.left = left.root;
@@ -76,10 +76,10 @@ public class KDTree {
     /**
      * Compares this tree with other and returns true if they are equal, false
      * otherwise.
-     * @param other The KDTree to compare against.
+     * @param other The KDTree2D to compare against.
      * @return true if the trees are identical, false otherwise.
      */
-    public boolean equals(KDTree other){
+    public boolean equals(KDTree2D other){
         return equals(root, other.root);
     }
 
@@ -271,4 +271,6 @@ public class KDTree {
 
         return largest;
     }
+
+
 }

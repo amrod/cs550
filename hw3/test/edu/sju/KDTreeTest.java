@@ -1,19 +1,21 @@
 package edu.sju;
 
 import junit.framework.Assert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ListIterator;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 
 public class KDTreeTest {
 
-    private KDTree t1;
+    private KDTree2D t1;
 
     @Before
     public void setUp(){
-        t1 = new KDTree(1, 1);
+        t1 = new KDTree2D(1, 1);
     }
 
     @Test
@@ -23,34 +25,34 @@ public class KDTreeTest {
 
     @Test
     public void testEqualsOneLevel() {
-        Assert.assertTrue("Not equals", t1.equals(new KDTree(1, 1)));
+        Assert.assertTrue("Not equals", t1.equals(new KDTree2D(1, 1)));
     }
 
     @Test
     public void testEquals2Levels() {
-        KDTree a = new KDTree(1, 2, new KDTree(3, 4), new KDTree(5, 6));
-        KDTree b = new KDTree(1, 2, new KDTree(3, 4), new KDTree(5, 6));
+        KDTree2D a = new KDTree2D(1, 2, new KDTree2D(3, 4), new KDTree2D(5, 6));
+        KDTree2D b = new KDTree2D(1, 2, new KDTree2D(3, 4), new KDTree2D(5, 6));
         Assert.assertTrue("Not equals", a.equals(b));
     }
 
     @Test
     public void testEqualsFalse() {
-        KDTree a = new KDTree(1, 2, new KDTree(3, 4), new KDTree(5, 6));
-        KDTree b = new KDTree(1, 2, new KDTree(3, 4), new KDTree(5, 5));
+        KDTree2D a = new KDTree2D(1, 2, new KDTree2D(3, 4), new KDTree2D(5, 6));
+        KDTree2D b = new KDTree2D(1, 2, new KDTree2D(3, 4), new KDTree2D(5, 5));
         Assert.assertFalse("Not equals", a.equals(b));
     }
 
     @Test
     public void testInsert1() {
         t1.insert(new Point2D(2, 2));
-        Assert.assertTrue(t1.equals(new KDTree(1, 1, null, new KDTree(2, 2))));
+        Assert.assertTrue(t1.equals(new KDTree2D(1, 1, null, new KDTree2D(2, 2))));
     }
 
     @Test
     public void testInsert2() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5));
-        KDTree t2 = new KDTree(4, 4, new KDTree(2, 2, new KDTree(1, 1), null),
-                new KDTree(5, 5));
+        KDTree2D t = new KDTree2D(4, 4, new KDTree2D(2, 2), new KDTree2D(5, 5));
+        KDTree2D t2 = new KDTree2D(4, 4, new KDTree2D(2, 2, new KDTree2D(1, 1), null),
+                new KDTree2D(5, 5));
 
         t.insert(new Point2D(1, 1));
 
@@ -59,9 +61,9 @@ public class KDTreeTest {
 
     @Test
     public void testInsert3() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5));
-        KDTree t2 = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
-                new KDTree(6, 6)));
+        KDTree2D t = new KDTree2D(4, 4, new KDTree2D(2, 2), new KDTree2D(5, 5));
+        KDTree2D t2 = new KDTree2D(4, 4, new KDTree2D(2, 2), new KDTree2D(5, 5, null,
+                new KDTree2D(6, 6)));
 
         t.insert(new Point2D(6, 6));
 
@@ -70,8 +72,8 @@ public class KDTreeTest {
 
     @Test
     public void testSearch1() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
-                new KDTree(6, 6)));
+        KDTree2D t = new KDTree2D(4, 4, new KDTree2D(2, 2), new KDTree2D(5, 5, null,
+                new KDTree2D(6, 6)));
 
         Point2D result = t.search(new Point2D(6, 6));
 
@@ -81,8 +83,8 @@ public class KDTreeTest {
 
     @Test
     public void testSearch2() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
-                new KDTree(6, 6)));
+        KDTree2D t = new KDTree2D(4, 4, new KDTree2D(2, 2), new KDTree2D(5, 5, null,
+                new KDTree2D(6, 6)));
 
         Point2D result = t.search(new Point2D(4, 4));
 
@@ -92,8 +94,8 @@ public class KDTreeTest {
 
     @Test
     public void testSearch3() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
-                new KDTree(6, 6)));
+        KDTree2D t = new KDTree2D(4, 4, new KDTree2D(2, 2), new KDTree2D(5, 5, null,
+                new KDTree2D(6, 6)));
 
         Point2D result = t.search(new Point2D(7, 7));
 
@@ -107,8 +109,8 @@ public class KDTreeTest {
 
     @Test
     public void testToString2() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2), new KDTree(5, 5, null,
-                new KDTree(6, 6)));
+        KDTree2D t = new KDTree2D(4, 4, new KDTree2D(2, 2), new KDTree2D(5, 5, null,
+                new KDTree2D(6, 6)));
 
         Assert.assertEquals("(4.0, 4.0)\n\t(2.0, 2.0)\n\t\tnull\n\t\tnull" +
                 "\n\t(5.0, 5.0)\n\t\tnull\n\t\t(6.0, 6.0)\n\t\t\tnull" +
@@ -125,8 +127,8 @@ public class KDTreeTest {
 
     @Test
     public void testFindMin2() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2),
-                new KDTree(5, 5, null, new KDTree(6, 6)));
+        KDTree2D t = new KDTree2D(4, 4, new KDTree2D(2, 2),
+                new KDTree2D(5, 5, null, new KDTree2D(6, 6)));
 
         Point2D p = t.findMin(0);
 
@@ -136,9 +138,9 @@ public class KDTreeTest {
 
     @Test
     public void testFindMinDim0() {
-        KDTree t = new KDTree(4, 4,
-                new KDTree(2, 2),
-                new KDTree(5, 5, new KDTree(6, 4), new KDTree(0, 6)));
+        KDTree2D t = new KDTree2D(4, 4,
+                new KDTree2D(2, 2),
+                new KDTree2D(5, 5, new KDTree2D(6, 4), new KDTree2D(0, 6)));
 
         Point2D p = t.findMin(0);
 
@@ -148,9 +150,9 @@ public class KDTreeTest {
 
     @Test
     public void testFindMinDim1() {
-        KDTree t = new KDTree(4, 4,
-                new KDTree(3.9, 3.9),
-                new KDTree(5, 5, new KDTree(6, 2.5), new KDTree(0, 6)));
+        KDTree2D t = new KDTree2D(4, 4,
+                new KDTree2D(3.9, 3.9),
+                new KDTree2D(5, 5, new KDTree2D(6, 2.5), new KDTree2D(0, 6)));
 
         Point2D p = t.findMin(1);
 
@@ -160,7 +162,7 @@ public class KDTreeTest {
 
     @Test
     public void testFindMinNull() {
-        KDTree t = new KDTree();
+        KDTree2D t = new KDTree2D();
 
         Point2D p = t.findMin(1);
 
@@ -179,8 +181,8 @@ public class KDTreeTest {
 
     @Test
     public void testFindMax2() {
-        KDTree t = new KDTree(4, 4, new KDTree(2, 2),
-                new KDTree(5, 5, null, new KDTree(6, 6)));
+        KDTree2D t = new KDTree2D(4, 4, new KDTree2D(2, 2),
+                new KDTree2D(5, 5, null, new KDTree2D(6, 6)));
 
         Point2D p = t.findMax(0);
 
@@ -190,9 +192,9 @@ public class KDTreeTest {
 
     @Test
     public void testFindMaxDim0() {
-        KDTree t = new KDTree(4, 4,
-                new KDTree(2, 2),
-                new KDTree(5, 5, new KDTree(6, 4), new KDTree(0, 6)));
+        KDTree2D t = new KDTree2D(4, 4,
+                new KDTree2D(2, 2),
+                new KDTree2D(5, 5, new KDTree2D(6, 4), new KDTree2D(0, 6)));
 
         Point2D p = t.findMax(0);
 
@@ -202,9 +204,9 @@ public class KDTreeTest {
 
     @Test
     public void testFindMaxDim1() {
-        KDTree t = new KDTree(4, 4,
-                new KDTree(3.9, 10),
-                new KDTree(5, 5, new KDTree(6, 2.5), new KDTree(0, 6)));
+        KDTree2D t = new KDTree2D(4, 4,
+                new KDTree2D(3.9, 10),
+                new KDTree2D(5, 5, new KDTree2D(6, 2.5), new KDTree2D(0, 6)));
 
         Point2D p = t.findMax(1);
 
@@ -214,10 +216,70 @@ public class KDTreeTest {
 
     @Test
     public void testFindMaxNull() {
-        KDTree t = new KDTree();
+        KDTree2D t = new KDTree2D();
 
         Point2D p = t.findMax(1);
 
         Assert.assertNull(p);
+    }
+
+    @Test
+    public void testPrintRange1() {
+        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream oldOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        // Points: (30,40) (5,25) (18,10) (80,90) (55,30) (35,45)
+        KDTree2D t = new KDTree2D(30, 40, new KDTree2D(5, 25, new KDTree2D(18, 10), null),
+                new KDTree2D(80, 90, new KDTree2D(55, 30, new KDTree2D(35, 45), null), null));
+
+        Point2D llc = new Point2D(5, 25);
+        Point2D urc = new Point2D(80, 90);
+
+        t.printRange(llc, urc);
+
+        Assert.assertEquals("(30.0, 40.0), (5.0, 25.0), (80.0, 90.0), (55.0, 30.0), (35.0, 45.0)", outContent.toString());
+
+        System.setOut(oldOut);
+    }
+
+    @Test
+    public void testPrintRangeAllPoints() {
+        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream oldOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        // Points: (30,40) (5,25) (18,10) (80,90) (55,30) (35,45)
+        KDTree2D t = new KDTree2D(30, 40, new KDTree2D(5, 25, new KDTree2D(18, 10), null),
+                new KDTree2D(80, 90, new KDTree2D(55, 30, new KDTree2D(35, 45), null), null));
+
+        Point2D llc = new Point2D(0, -1.5);
+        Point2D urc = new Point2D(100, 200);
+
+        t.printRange(llc, urc);
+
+        Assert.assertEquals("(30.0, 40.0), (5.0, 25.0), (18.0, 10.0), (80.0, 90.0), (55.0, 30.0), (35.0, 45.0)", outContent.toString());
+
+        System.setOut(oldOut);
+    }
+
+    @Test
+    public void testPrintRangeNoPoints() {
+        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream oldOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        // Points: (30,40) (5,25) (18,10) (80,90) (55,30) (35,45)
+        KDTree2D t = new KDTree2D(30, 40, new KDTree2D(5, 25, new KDTree2D(18, 10), null),
+                new KDTree2D(80, 90, new KDTree2D(55, 30, new KDTree2D(35, 45), null), null));
+
+        Point2D llc = new Point2D(100, 100);
+        Point2D urc = new Point2D(200, 200);
+
+        t.printRange(llc, urc);
+
+        Assert.assertEquals("", outContent.toString());
+
+        System.setOut(oldOut);
     }
 }
