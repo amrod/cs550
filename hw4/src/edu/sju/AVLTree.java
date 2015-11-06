@@ -103,6 +103,15 @@ public class AVLTree<E extends Comparable<E>>
             return localRoot; // Rebalance not needed.
         } else { // item > data
 // Insert solution to programming exercise 2, section 2, chapter 9 here
+            localRoot.right = add((AVLNode<E>) localRoot.right, item);
+
+            if (increase) {
+                incrementBalance(localRoot);
+                if (localRoot.balance > AVLNode.RIGHT_HEAVY) {
+                    increase = false;
+                    return rebalanceRight(localRoot);
+                }
+            }
         }
     }
 
@@ -162,11 +171,31 @@ public class AVLTree<E extends Comparable<E>>
      * @post The balance is decremented and the increase flags is set
      *       to false if the overall height of this subtree has not
      *       changed.
-     * @param node The AVL node whose balance is to be incremented
+     * @param node The AVL node whose balance is to be decremented
      */
     private void decrementBalance(AVLNode<E> node) {
         // Decrement the balance.
         node.balance--;
+        if (node.balance == AVLNode.BALANCED) {
+            // If now balanced, overall height has not increased.
+            increase = false;
+        }
+    }
+
+    /**
+     * Method to increment the balance field and to reset the value of
+     * increase.
+     * @pre The balance field was correct prior to an insertion [or
+     *      removal,] and an item is either been added to the left[
+     *      or removed from the right].
+     * @post The balance is incremented and the increase flags is set
+     *       to false if the overall height of this subtree has not
+     *       changed.
+     * @param node The AVL node whose balance is to be incremented
+     */
+    private void incrementBalance(AVLNode<E> node) {
+        // Increment the balance.
+        node.balance++;
         if (node.balance == AVLNode.BALANCED) {
             // If now balanced, overall height has not increased.
             increase = false;
