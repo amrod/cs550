@@ -112,6 +112,7 @@ public class AVLTree<E extends Comparable<E>>
                     return rebalanceRight(localRoot);
                 }
             }
+            return localRoot;
         }
     }
 
@@ -135,13 +136,13 @@ public class AVLTree<E extends Comparable<E>>
             // Adjust the balances to be their new values after
             // the rotations are performed.
             if (leftRightChild.balance < AVLNode.BALANCED) {
-                leftChild.balance = AVLNode.LEFT_HEAVY;
-                leftRightChild.balance = AVLNode.BALANCED;
-                localRoot.balance = AVLNode.BALANCED;
-            } else if (leftRightChild.balance > AVLNode.BALANCED) {
                 leftChild.balance = AVLNode.BALANCED;
                 leftRightChild.balance = AVLNode.BALANCED;
                 localRoot.balance = AVLNode.RIGHT_HEAVY;
+            } else if (leftRightChild.balance > AVLNode.BALANCED) {
+                leftChild.balance = AVLNode.LEFT_HEAVY;
+                leftRightChild.balance = AVLNode.BALANCED;
+                localRoot.balance = AVLNode.BALANCED;
             } else {
                 leftChild.balance = AVLNode.BALANCED;
                 localRoot.balance = AVLNode.BALANCED;
