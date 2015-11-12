@@ -4,6 +4,7 @@
 *.class
 *.gpj
 hw*/.idea/*
+.idea/*
 hw1/prod/*
 hw1/*.txt
 *.iml
