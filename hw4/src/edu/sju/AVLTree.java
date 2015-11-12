@@ -4,7 +4,11 @@ package edu.sju;
 /**
  * Self-balancing binary search tree using the algorithm defined
  * by Adelson-Velskii and Landis.
- * @author Koffman and Wolfgang
+ * Based on Koffman and Wolfgang textbook implementation.
+ * Added functionaliy: rebalanceRight(), rotateLeft(), incrementBalance(), delete(), display()
+ * Bug fixes to K&W code:
+ *  * inverted description of rotateRight()
+ *  * inverted balance assignment in rebalanceLeft()
  */
 public class AVLTree<E extends Comparable<E>>
          extends BinarySearchTreeWithRotate<E> {
@@ -126,8 +130,9 @@ public class AVLTree<E extends Comparable<E>>
         }
     }
 
+    // Insert solution to programming project 5, chapter -1 here
     /**
-     * Starter method delete.
+     * Starter method remove.
      * @post The object is not in the tree.
      * @param target The object to be deleted
      * @return The object deleted from the tree
@@ -369,12 +374,22 @@ public class AVLTree<E extends Comparable<E>>
 
     }
 
+    /***
+     * Prints a representation of the tree using in-order traversal.
+     */
     public void display(){
         StringBuilder sb = new StringBuilder();
         buildDisplay((AVLNode<E>) this.root, sb, 0, true);
         System.out.println(sb.toString());
     }
 
+    /***
+     * Recursively traverse the tree in-order, constructing a string representation of the nodes.
+     * @param localRoot Current root.
+     * @param sb StringBuilder instance where node data values are stored.
+     * @param depth Depth of the current node.
+     * @param showBalance Flag to determine whether to include the balance value in the output.
+     */
     private void buildDisplay(AVLNode<E> localRoot, StringBuilder sb, int depth, boolean showBalance){
         if (localRoot == null)
             return;
@@ -391,6 +406,11 @@ public class AVLTree<E extends Comparable<E>>
         buildDisplay((AVLNode<E>) localRoot.right, sb, depth + 1, showBalance);
     }
 
+    /***
+     * Runs the argument-less method specified by the string argument method on this tree.
+     * @param method String representation of the method to run.
+     * @throws InterruptedException if the method specified is "quit"
+     */
     public void runMethod(String method) throws InterruptedException{
         if (method.equals(METHODS[3]))
             this.display();
@@ -398,6 +418,11 @@ public class AVLTree<E extends Comparable<E>>
             throw new InterruptedException();
     }
 
+    /***
+     * Runs the method specified by the string argument method on this tree with the given argument arg.
+     * @param method String representation of the method to run.
+     * @param arg Argument to pass to the method being run.
+     */
     public void runMethod(String method, E arg){
         if (method.equals(METHODS[0])) {
             if (this.insert(arg))
@@ -416,5 +441,4 @@ public class AVLTree<E extends Comparable<E>>
                 System.out.println(String.format("%1s not found'", arg));
     }
 
-// Insert solution to programming project 5, chapter -1 here
 }
