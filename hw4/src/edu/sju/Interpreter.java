@@ -59,24 +59,23 @@ public class Interpreter {
         return sb.toString();
     }
 
-    public AVLTree<Integer> run() throws InterruptedException{
+    public AVLTree<Integer> run() throws Exception{
         AVLTree<Integer> tree = new AVLTree<Integer>();
-        try {
-            String[] parts;
-            for (String str : instructions) {
-                parts = makeCommandParts(str);
 
-                if (parts.length > 1)
+        String[] parts;
+        for (String str : instructions) {
+            parts = makeCommandParts(str);
+
+            if (parts.length > 1)
+                try {
                     tree.runMethod(parts[0], Integer.parseInt(parts[1]));
-                else
-                    tree.runMethod(parts[0]);
-            }
-            return tree;
-        } catch (InterruptedException e){
-            throw e;
-        } catch (Exception e){
-            System.out.println(e.toString());
-            return null;
+                } catch (NumberFormatException e) {
+                    throw new NumberFormatException(parts[1]);
+                }
+            else
+                tree.runMethod(parts[0]);
         }
+        return tree;
+
     }
 }

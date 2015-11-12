@@ -16,10 +16,14 @@ public class Driver {
             Interpreter itptr = new Interpreter();
             itptr.loadInstructionFile(fpath);
             itptr.run();
+        }catch (NumberFormatException e){
+            System.out.println(String.format("Argument \"%1s\" is not a valid integer.", e.getMessage()));
         } catch (IOException e){
             System.out.println(e.getMessage());
         } catch (InterruptedException e) {
             System.exit(0);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
 
     }
