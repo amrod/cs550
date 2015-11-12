@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Interpreter {
     ArrayList<String> instructions;
 
-    public void Interpreter(){}
     public void Interpreter(ArrayList<String> i){
         this.instructions = i;
     }
@@ -60,15 +59,15 @@ public class Interpreter {
         return sb.toString();
     }
 
-    public AVLTree<String> run() throws InterruptedException{
-        AVLTree<String> tree = new AVLTree<String>();
+    public AVLTree<Integer> run() throws InterruptedException{
+        AVLTree<Integer> tree = new AVLTree<Integer>();
         try {
             String[] parts;
             for (String str : instructions) {
                 parts = makeCommandParts(str);
 
                 if (parts.length > 1)
-                    tree.runMethod(parts[0], parts[1]);
+                    tree.runMethod(parts[0], Integer.parseInt(parts[1]));
                 else
                     tree.runMethod(parts[0]);
             }
