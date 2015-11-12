@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.lang.InterruptedException;
 
 public class Driver {
-
-    public static void main(String[] args) throws IOException{
+    /***
+     * Driver program allows loading an instruction file from the command line.
+     * Defaults to test-hw4.txt.
+     * @param args Command-line arguments. A single argument is recognized,
+     *             must be the path to an existing instruction file.
+     */
+    public static void main(String[] args) {
         String fpath;
         if (args.length > 0)
             fpath = args[0];
@@ -17,7 +22,9 @@ public class Driver {
             itptr.loadInstructionFile(fpath);
             itptr.run();
         }catch (NumberFormatException e){
-            System.out.println(String.format("Argument \"%1s\" is not a valid integer.", e.getMessage()));
+            System.out.println(String.format(
+                    "Argument \"%1s\" is not a valid integer.",
+                    e.getMessage()));
         } catch (IOException e){
             System.out.println(e.getMessage());
         } catch (InterruptedException e) {
