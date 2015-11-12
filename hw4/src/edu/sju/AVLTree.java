@@ -371,21 +371,24 @@ public class AVLTree<E extends Comparable<E>>
 
     public void display(){
         StringBuilder sb = new StringBuilder();
-        buildDisplay((AVLNode<E>) this.root, sb, 0);
+        buildDisplay((AVLNode<E>) this.root, sb, 0, true);
         System.out.println(sb.toString());
     }
 
-    private void buildDisplay(AVLNode<E> localRoot, StringBuilder sb, int depth){
+    private void buildDisplay(AVLNode<E> localRoot, StringBuilder sb, int depth, boolean showBalance){
         if (localRoot == null)
             return;
 
-        buildDisplay((AVLNode<E>) localRoot.left, sb, depth + 1);
+        buildDisplay((AVLNode<E>) localRoot.left, sb, depth + 1, showBalance);
 
         for (int i = 0; i < depth; i++)
             sb.append(".");
-        sb.append(localRoot.data).append(" (").append(localRoot.balance).append(")").append("\n");
+        if (showBalance)
+            sb.append(localRoot.data).append(" (").append(localRoot.balance).append(")").append("\n");
+        else
+            sb.append(localRoot.data).append("\n");
 
-        buildDisplay((AVLNode<E>) localRoot.right, sb, depth + 1);
+        buildDisplay((AVLNode<E>) localRoot.right, sb, depth + 1, showBalance);
     }
 
     public void runMethod(String method) throws InterruptedException{
