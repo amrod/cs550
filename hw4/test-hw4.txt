@@ -14,8 +14,8 @@ display
 
 remove	25
 	
-find 80
-find 50
+find	80
+find	50
 
 remove	10
 display	
