@@ -3,10 +3,6 @@ import java.io.*;
 
 public class SpellChecker {
     private Hashtable<String, String> table = new Hashtable<>();
-    private int collisions = 0;
-    private int total_ins_lookup = 0;
-    private int total_chain_lengths = 0;
-    private int max_chain_length = 0;
 
     public void loadDictionary(String path) throws IOException {
         String line;
@@ -21,6 +17,34 @@ public class SpellChecker {
         }
 
         fileReader.close();
+    }
+
+    /**
+     * Get the current load factor.
+     * @return the current load factor.
+     */
+    public double getLoadFactor(){
+        return table.getLoadFactor();
+    }
+
+    /**
+     * Total number of collisions found.
+     * @return Total number of collisions found.
+     */
+    public int getTotalCollisions(){
+        return table.getTotalCollisions();
+    }
+
+    /**
+     * Get the average chain length found during insertions/lookups.
+     * @return average chain length found during insertions/lookups.
+     */
+    public double getAverageChainLength(){
+        return table.getAverageChainLength();
+    }
+
+    public int getMaxChainLength(){
+        return table.getMaxChainLength();
     }
 
 }
