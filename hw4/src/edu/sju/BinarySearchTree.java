@@ -187,7 +187,7 @@ public class BinarySearchTree<E extends Comparable<E>>
      *        predecessor (ip)
      * @return The data in the ip
      */
-    private E findLargestChild(Node<E> parent) {
+    protected E findLargestChild(Node<E> parent) {
         // If the right child has no right child, it is
         // the inorder predecessor.
         if (parent.right.right == null) {

@@ -49,8 +49,8 @@ public class AVLTree<E extends Comparable<E>>
     // Data Fields
     /** Flag to indicate that height of tree has increased. */
     private boolean increase;
-
-// Insert solution to programming project 5, chapter -1 here
+    /** Flag to indicate that height of tree has decreased. */
+    private boolean decrease;
 
     // Methods
     /**
@@ -113,6 +113,89 @@ public class AVLTree<E extends Comparable<E>>
                 }
             }
             return localRoot;
+        }
+    }
+
+    /**
+     * Starter method delete.
+     * @post The object is not in the tree.
+     * @param target The object to be deleted
+     * @return The object deleted from the tree
+     *         or null if the object was not in the tree
+     * @throws ClassCastException if target does not implement
+     *         Comparable
+     */
+    public E delete(E target) {
+        decrease = false;
+        root = delete((AVLNode<E>) root, target);
+        return deleteReturn;
+    }
+
+    /**
+     * Recursive delete method.
+     * @post The item is not in the tree;
+     *       deleteReturn is equal to the deleted item
+     *       as it was stored in the tree or null
+     *       if the item was not found.
+     * @param localRoot The root of the current subtree
+     * @param item The item to be deleted
+     * @return The modified local root that does not contain
+     *         the item
+     */
+    private Node<E> delete(AVLNode<E> localRoot, E item) {
+        if (localRoot == null) {
+            // item is not in the tree.
+            deleteReturn = null;
+            return localRoot;
+        }
+
+        // Search for item to delete.
+        int compResult = item.compareTo(localRoot.data);
+        if (compResult < 0) {
+            // item is smaller than localRoot.data.
+            localRoot.left = delete((AVLNode<E>) localRoot.left, item);
+            if (decrease) {
+                incrementBalance(localRoot);
+                if (localRoot.balance < AVLNode.LEFT_HEAVY) {
+                    increase = false;
+                    return rebalanceLeft(localRoot);
+                }
+            }
+            return localRoot;
+        } else if (compResult > 0) {
+            // item is larger than localRoot.data.
+            localRoot.right = delete((AVLNode<E>) localRoot.right, item);
+            return localRoot;
+        } else {
+            // item is at local root.
+            deleteReturn = localRoot.data;
+            decrease = true;
+
+            if (localRoot.left == null) {
+                // If there is no left child, return right child
+                // which can also be null.
+                return localRoot.right;
+            } else if (localRoot.right == null) {
+                // If there is no right child, return left child.
+                return localRoot.left;
+            } else {
+                // Node being deleted has 2 children, replace the data
+                // with inorder predecessor.
+                if (localRoot.left.right == null) {
+                    // The left child has no right child.
+                    // Replace the data with the data in the
+                    // left child.
+                    localRoot.data = localRoot.left.data;
+                    // Replace the left child with its left child.
+                    localRoot.left = localRoot.left.left;
+                    return localRoot;
+                } else {
+                    // Search for the inorder predecessor (ip) and
+                    // replace deleted node's data with ip.
+                    localRoot.data = findLargestChild(localRoot.left);
+                    return localRoot;
+                }
+            }
         }
     }
 
@@ -220,8 +303,9 @@ public class AVLTree<E extends Comparable<E>>
         // Decrement the balance.
         node.balance--;
         if (node.balance == AVLNode.BALANCED) {
-            // If now balanced, overall height has not increased.
+            // If now balanced, overall height has not increased or decreased.
             increase = false;
+            decrease = false;
         }
     }
 
@@ -230,8 +314,8 @@ public class AVLTree<E extends Comparable<E>>
      * Method to increment the balance field and to reset the value of
      * increase.
      * @pre The balance field was correct prior to an insertion [or
-     *      removal,] and an item is either been added to the left[
-     *      or removed from the right].
+     *      removal,] and an item is either been added to the right[
+     *      or removed from the left].
      * @post The balance is incremented and the increase flags is set
      *       to false if the overall height of this subtree has not
      *       changed.
@@ -239,9 +323,11 @@ public class AVLTree<E extends Comparable<E>>
      */
     private void incrementBalance(AVLNode<E> node) {
         // Increment the balance.
+        int oldBalance = node.balance;
         node.balance++;
+
         if (node.balance == AVLNode.BALANCED) {
-            // If now balanced, overall height has not increased.
+            // If now balanced, overall height has not increased or decreased.
             increase = false;
         }
     }
