@@ -12,16 +12,16 @@ public class Hashtable<K, V> {
     /** Array of linked lists represents the hashtable. */
     private LinkedList<Entry<K, V>>[] table;
     private int numKeys;
-    private static final int CAPACITY = 101;
+    private static final int CAPACITY = 201;
     /** Keep load factor below 0.9. */
     private static final double LOAD_THRESHOLD = 0.9;
     /** Total number of collisions found during insertion/lookup. */
     private int totalCollisions = 0;
-    private int total_insertions_lookups = 0;
+    private int totalInsertionsLookups = 0;
     /** Total length of chains found during insertion/lookup. */
-    private int total_chain_lengths = 0;
+    private int totalChainLengths = 0;
     /** Maximum length of a chain found during insertion/lookup. */
-    private int max_chain_length = 0;
+    private int maxChainLength = 0;
 
     /** Contains key-value pairs for a hash table. */
     private static class Entry<K, V> implements Map.Entry<K, V> {
@@ -90,8 +90,8 @@ public class Hashtable<K, V> {
      * Calculates the current load factor.
      * @return the current load factor.
      */
-    public double loadFactor(){
-        return numKeys / table.length;
+    public double getLoadFactor(){
+        return numKeys / (double) table.length;
     }
 
     /**
@@ -107,16 +107,21 @@ public class Hashtable<K, V> {
      * @return average chain length found during insertions/lookups.
      */
     public double getAverageChainLength(){
-        if (total_insertions_lookups < 1){
+        if (totalInsertionsLookups < 1){
             return 0;
         }
-        return total_chain_lengths / (double) total_insertions_lookups;
+        return (double) totalChainLengths / (double) totalInsertionsLookups;
+    }
+
+    public int getMaxChainLength(){
+        return maxChainLength;
     }
 
     private void addChainLength(int len){
-        max_chain_length = Math.max(max_chain_length, len);
-        total_chain_lengths += len;
-        total_insertions_lookups++;
+        maxChainLength = Math.max(maxChainLength, len);
+        totalChainLengths += len;
+        if (len > 0)
+            totalInsertionsLookups++;
     }
 
     /**
