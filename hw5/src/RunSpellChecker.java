@@ -9,16 +9,14 @@ public class RunSpellChecker {
 
         try{
             sc.loadDictionary(args[0]);
-
+            System.out.print(sc.loadInputText(args[1]));
         } catch (IOException e) {
-            System.out.println("Error loading the dictionary file.");
+            System.out.println("Error loading file: " + e.getMessage());
         }
-
-
-
 
         DecimalFormat df2 = new DecimalFormat("###.##");
 
+        System.out.print("\n");
         System.out.print("no_collisions: ");
         System.out.println(sc.getTotalCollisions());
 
