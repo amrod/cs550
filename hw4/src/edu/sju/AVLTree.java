@@ -4,10 +4,16 @@ package edu.sju;
 /**
  * Self-balancing binary search tree using the algorithm defined
  * by Adelson-Velskii and Landis.
- * @author Koffman and Wolfgang
+ * Based on Koffman and Wolfgang textbook implementation.
+ * Added functionaliy: rebalanceRight(), rotateLeft(), incrementBalance(), delete(), display()
+ * Bug fixes to K&W code:
+ *  * inverted description of rotateRight()
+ *  * inverted balance assignment in rebalanceLeft()
  */
 public class AVLTree<E extends Comparable<E>>
          extends BinarySearchTreeWithRotate<E> {
+
+    public static String[] METHODS = {"insert", "remove", "find", "display", "quit"};
 
     // Insert nested class AVLNode<E> here.
     /*<listing chapter="9" number="2">*/
@@ -53,6 +59,15 @@ public class AVLTree<E extends Comparable<E>>
     private boolean decrease;
 
     // Methods
+    public static boolean isMethodSupported(String method){
+        method = method.toLowerCase();
+        for (String m: METHODS){
+            if (method.equals(m))
+                return true;
+        }
+        return false;
+    }
+
     /**
      * add starter method.
      * @pre the item to insert implements the Comparable interface.
@@ -61,8 +76,7 @@ public class AVLTree<E extends Comparable<E>>
      *         if the object already exists in the tree
      * @throws ClassCastException if item is not Comparable
      */
-    @Override
-    public boolean add(E item) {
+    public boolean insert(E item) {
         increase = false;
         root = add((AVLNode<E>) root, item);
         return addReturn;
@@ -116,8 +130,9 @@ public class AVLTree<E extends Comparable<E>>
         }
     }
 
+    // Insert solution to programming project 5, chapter -1 here
     /**
-     * Starter method delete.
+     * Starter method remove.
      * @post The object is not in the tree.
      * @param target The object to be deleted
      * @return The object deleted from the tree
@@ -125,8 +140,9 @@ public class AVLTree<E extends Comparable<E>>
      * @throws ClassCastException if target does not implement
      *         Comparable
      */
-    public E delete(E target) {
+    public E remove(E target) {
         decrease = false;
+        deleteReturn = null;
         root = delete((AVLNode<E>) root, target);
         return deleteReturn;
     }
@@ -146,7 +162,7 @@ public class AVLTree<E extends Comparable<E>>
         if (localRoot == null) {
             // item is not in the tree.
             deleteReturn = null;
-            return localRoot;
+            return null;
         }
 
         // Search for item to delete.
@@ -156,15 +172,21 @@ public class AVLTree<E extends Comparable<E>>
             localRoot.left = delete((AVLNode<E>) localRoot.left, item);
             if (decrease) {
                 incrementBalance(localRoot);
-                if (localRoot.balance < AVLNode.LEFT_HEAVY) {
-                    increase = false;
-                    return rebalanceLeft(localRoot);
+                if (localRoot.balance > AVLNode.RIGHT_HEAVY) {
+                    return rebalanceRight(localRoot);
                 }
             }
             return localRoot;
         } else if (compResult > 0) {
             // item is larger than localRoot.data.
             localRoot.right = delete((AVLNode<E>) localRoot.right, item);
+
+            if (decrease) {
+                decrementBalance(localRoot);
+                if (localRoot.balance < AVLNode.LEFT_HEAVY) {
+                    return rebalanceLeft(localRoot);
+                }
+            }
             return localRoot;
         } else {
             // item is at local root.
@@ -175,9 +197,11 @@ public class AVLTree<E extends Comparable<E>>
                 // If there is no left child, return right child
                 // which can also be null.
                 return localRoot.right;
+
             } else if (localRoot.right == null) {
                 // If there is no right child, return left child.
                 return localRoot.left;
+
             } else {
                 // Node being deleted has 2 children, replace the data
                 // with inorder predecessor.
@@ -188,11 +212,22 @@ public class AVLTree<E extends Comparable<E>>
                     localRoot.data = localRoot.left.data;
                     // Replace the left child with its left child.
                     localRoot.left = localRoot.left.left;
+
+                    incrementBalance(localRoot);
+                    if (localRoot.balance > AVLNode.RIGHT_HEAVY) {
+                        return rebalanceRight(localRoot);
+                    }
                     return localRoot;
+
                 } else {
                     // Search for the inorder predecessor (ip) and
                     // replace deleted node's data with ip.
                     localRoot.data = findLargestChild(localRoot.left);
+
+                    decrementBalance(localRoot);
+                    if (localRoot.balance < AVLNode.LEFT_HEAVY){
+                        return rebalanceLeft(localRoot);
+                    }
                     return localRoot;
                 }
             }
@@ -275,8 +310,9 @@ public class AVLTree<E extends Comparable<E>>
                 rightChild.balance = AVLNode.BALANCED;
                 localRoot.balance = AVLNode.BALANCED;
             }
+
             // Perform right rotation.
-            localRoot.left = rotateRight(rightChild);
+            localRoot.right = rotateRight(rightChild);
         } else { //Right-Right case
             // In this case the rightChild (the new root)
             // and the root (new left child) will both be balanced
@@ -303,8 +339,11 @@ public class AVLTree<E extends Comparable<E>>
         // Decrement the balance.
         node.balance--;
         if (node.balance == AVLNode.BALANCED) {
-            // If now balanced, overall height has not increased or decreased.
+            // If now balanced, overall height has not increased.
             increase = false;
+
+        } else if (node.balance == AVLNode.LEFT_HEAVY || node.balance == AVLNode.RIGHT_HEAVY) {
+            // If went from balanced to unbalanced, overall height has not decreased.
             decrease = false;
         }
     }
@@ -323,14 +362,83 @@ public class AVLTree<E extends Comparable<E>>
      */
     private void incrementBalance(AVLNode<E> node) {
         // Increment the balance.
-        int oldBalance = node.balance;
         node.balance++;
-
         if (node.balance == AVLNode.BALANCED) {
-            // If now balanced, overall height has not increased or decreased.
+            // If now balanced, overall height has not increased.
             increase = false;
+
+        } else if (node.balance == AVLNode.LEFT_HEAVY || node.balance == AVLNode.RIGHT_HEAVY) {
+            // If went from balanced to unbalanced, overall height has not decreased.
+            decrease = false;
         }
+
     }
 
-// Insert solution to programming project 5, chapter -1 here
+    /***
+     * Prints a representation of the tree using in-order traversal.
+     */
+    public void display(){
+        StringBuilder sb = new StringBuilder();
+        buildDisplay((AVLNode<E>) this.root, sb, 0, true);
+        System.out.println(sb.toString());
+    }
+
+    /***
+     * Recursively traverse the tree in-order, constructing a string representation of the nodes.
+     * @param localRoot Current root.
+     * @param sb StringBuilder instance where node data values are stored.
+     * @param depth Depth of the current node.
+     * @param showBalance Flag to determine whether to include the balance value in the output.
+     */
+    private void buildDisplay(AVLNode<E> localRoot, StringBuilder sb, int depth, boolean showBalance){
+        if (localRoot == null)
+            return;
+
+        buildDisplay((AVLNode<E>) localRoot.left, sb, depth + 1, showBalance);
+
+        for (int i = 0; i < depth; i++)
+            sb.append(".");
+        if (showBalance)
+            sb.append(localRoot.data).append(" (").append(localRoot.balance).append(")").append("\n");
+        else
+            sb.append(localRoot.data).append("\n");
+
+        buildDisplay((AVLNode<E>) localRoot.right, sb, depth + 1, showBalance);
+    }
+
+    /***
+     * Runs the argument-less method specified by the string argument method on this tree.
+     * @param method String representation of the method to run.
+     * @throws InterruptedException if the method specified is "quit"
+     */
+    public void runMethod(String method) throws InterruptedException{
+        if (method.equals(METHODS[3]))
+            this.display();
+        else if (method.equals(METHODS[4]))
+            throw new InterruptedException();
+    }
+
+    /***
+     * Runs the method specified by the string argument method on this tree with the given argument arg.
+     * @param method String representation of the method to run.
+     * @param arg Argument to pass to the method being run.
+     */
+    public void runMethod(String method, E arg){
+        if (method.equals(METHODS[0])) {
+            if (this.insert(arg))
+                System.out.println(String.format("Inserted %1s", arg));
+            else
+                System.out.println(String.format("%1s cannot be inserted'", arg));
+        } else if (method.equals(METHODS[1]))
+            if (this.remove(arg) != null)
+                System.out.println(String.format("Removed %1s", arg));
+            else
+                System.out.println(String.format("%1s not found'", arg));
+        else if (method.equals(METHODS[2]))
+            if (this.find(arg) != null)
+                System.out.println(String.format("Found %1s", arg));
+            else
+                System.out.println(String.format("%1s not found'", arg));
+    }
+
 }

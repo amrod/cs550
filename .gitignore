@@ -4,8 +4,11 @@
 *.class
 *.gpj
 hw*/.idea/*
+.idea/*
 hw1/prod/*
 hw1/*.txt
+hw4/out/*
+test-hw4.*.txt
 *.iml
 *.jar
 StudentSourceCode/*
