@@ -46,7 +46,32 @@ public class DepthFirstSearch {
             }
         }
     }
-    
+
+    /**
+     * Constructs the depth-first search of a Graph with the start vertices
+     * in the order specified. The first vertex visited is order[0].
+     * @param g The graph
+     * @param order The array giving the order
+     * in which the start vertices should be selected
+     */
+    public DepthFirstSearch(Graph g, int[] order) {
+        int n = g.getNumV();
+        this.graph = g;
+
+        parent = new int[n];
+        visited = new boolean[n];
+        discoveryOrder = new int[n];
+        finishOrder = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = -1;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!visited[order[i]]) {
+                depthFirstSearch(i);
+            }
+        }
+    }
+
     /**
      * Recursively depth-first search the graph
      * starting at vertex current.

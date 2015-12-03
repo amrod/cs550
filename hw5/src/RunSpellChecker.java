@@ -2,9 +2,17 @@ import edu.sju.SpellChecker;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
+/**
+ * Spell checker front-end.
+ */
 public class RunSpellChecker {
 
     public static void main(String[] args) {
+        if (args.length < 2){
+            System.out.println("Please provide 2 arguments:\n <dictionary path> <input text path>");
+            System.exit(-1);
+        }
+
         SpellChecker sc = new SpellChecker();
 
         try{
@@ -12,6 +20,7 @@ public class RunSpellChecker {
             System.out.print(sc.loadInputText(args[1]));
         } catch (IOException e) {
             System.out.println("Error loading file: " + e.getMessage());
+            System.exit(-1);
         }
 
         DecimalFormat df2 = new DecimalFormat("###.##");

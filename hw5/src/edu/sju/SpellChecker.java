@@ -2,10 +2,16 @@ package edu.sju;
 import java.io.*;
 import java.util.ArrayList;
 
+/** Spellchecker class */
 public class SpellChecker {
     private Hashtable<String, String> table = new Hashtable<>();
     final char[] ALPHABET = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
+    /**
+     * Reads a dictionary file into a hashtable.
+     * @param path path of the dictionary file to load.
+     * @throws IOException if file is not readable.
+     */
     public void loadDictionary(String path) throws IOException {
         String line;
 
@@ -19,6 +25,13 @@ public class SpellChecker {
         fileReader.close();
     }
 
+    /**
+     * Reads entries from an input file and checks spelling against dictionary.
+     * @param path path to the input file.
+     * @return A string with possible corrections to the words not found in
+     * the dictionary.
+     * @throws IOException if input file is not readable.
+     */
     public String loadInputText(String path) throws IOException {
         ArrayList<String> mispelled = new ArrayList<>();
         String word;
@@ -27,16 +40,18 @@ public class SpellChecker {
         FileReader fileReader = new FileReader(path);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-        int i = 1;
+        int i = 1; // the line number
         while ((word = bufferedReader.readLine()) != null){
             if (word.length() == 0)
                 continue;
 
             word = word.toLowerCase();
-            result.append(word).append(", ");
-            result.append(i).append(": ");
-            result.append(getCorrections(word));
-            result.append("\n");
+            if (table.get(word) == null) {
+                result.append(word).append(", ");
+                result.append(i).append(": ");
+                result.append(getCorrections(word));
+                result.append("\n");
+            }
             i++;
         }
 
@@ -44,6 +59,12 @@ public class SpellChecker {
         return result.toString();
     }
 
+    /**
+     * Attempts to find a correction by changing one letter and looking up
+     * the resulting word in the dictionary.
+     * @param word Word to find a correction for.
+     * @return A list of corrections separated by comma.
+     */
     private String getCorrections(String word){
         StringBuilder result = new StringBuilder();
         Hashtable<String, Boolean> corrections = new Hashtable<>();
