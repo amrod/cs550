@@ -40,13 +40,61 @@ public class DepthFirstSearch {
         for (int i = 0; i < n; i++) {
             parent[i] = -1;
         }
-        for (int i = 0; i < n; i++) {
-            if (!visited[i]) {
-                depthFirstSearch(i);
+        for (int j = 0; j < n; j++) {
+            if (!visited[j]) {
+                depthFirstSearch(j);
             }
         }
     }
+    
+    /**
+     * Recursively depth-first search the graph
+     * starting at vertex current.
+     * @param current The start vertex
+     */
+    public void depthFirstSearch(int current) {
+        // Mark the current vertex visited.
+        visited[current] = true;
+        discoveryOrder[discoverIndex++] = current;
+        // Examine each vertex adjacent to the current vertex
+        Iterator<Edge> itr = graph.edgeIterator(current);
+        while (itr.hasNext()) {
+            int neighbor = itr.next().getDest();
+            // Process a neighbor that has not been visited
+            if (!visited[neighbor]) {
+                // Insert (current, neighbor) into the depth-
+                // first search tree.
+                parent[neighbor] = current;
+                // Recursively apply the algorithm
+                // starting at neighbor.
+                depthFirstSearch(neighbor);
+            }
+        }
+        // Mark current finished.
+        finishOrder[finishIndex++] = current;
+    }
 
+
+    /** Get discovery  order
+     *  @return discovery order
+     */
+    public int[] getDiscoveryOrder() {
+        return discoveryOrder;
+    }
+
+    /** Get finish order
+     *  @return finish order
+     */
+    public int[] getFinishOrder() {
+        return finishOrder;
+    }
+
+    /** Get parent
+     *  @return parent
+     */
+    public int[] getParent() {
+        return parent;
+    }
 
 }
 
